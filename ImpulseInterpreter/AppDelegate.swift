@@ -20,6 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func handleOpenFile(sender: AnyObject) {
         
         appController.handleOpenFile()
+        
+        appController.getDataFromFile()
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {

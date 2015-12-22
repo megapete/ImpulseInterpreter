@@ -12,6 +12,7 @@
 		D37D5B1F1C28C57000F19BAF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D37D5B1D1C28C57000F19BAF /* MainMenu.xib */; };
 		D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */; };
 		D37D5B291C28CC8B00F19BAF /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B281C28CC8B00F19BAF /* PCH_Defs.swift */; };
+		D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		D37D5B201C28C57000F19BAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_AppController.swift; sourceTree = "<group>"; };
 		D37D5B281C28CC8B00F19BAF /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Defs.swift; path = ../../TransformerModel/TransformerModel/PCH_Defs.swift; sourceTree = "<group>"; };
+		D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_NumericalData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				D37D5B281C28CC8B00F19BAF /* PCH_Defs.swift */,
 				D37D5B191C28C57000F19BAF /* AppDelegate.swift */,
 				D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */,
+				D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */,
 				D37D5B1B1C28C57000F19BAF /* Assets.xcassets */,
 				D37D5B1D1C28C57000F19BAF /* MainMenu.xib */,
 				D37D5B201C28C57000F19BAF /* Info.plist */,
@@ -136,6 +139,7 @@
 			files = (
 				D37D5B291C28CC8B00F19BAF /* PCH_Defs.swift in Sources */,
 				D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */,
+				D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */,
 				D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

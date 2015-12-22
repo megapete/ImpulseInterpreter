@@ -10,9 +10,17 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    /// The AppController object for the instance
+    let appController = PCH_AppController()
 
     @IBOutlet weak var window: NSWindow!
 
+    /// Menu handlers (these just call the AppController functions of the same name
+    @IBAction func handleOpenFile(sender: AnyObject) {
+        
+        appController.handleOpenFile()
+    }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application

@@ -10,6 +10,8 @@
 		D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B191C28C57000F19BAF /* AppDelegate.swift */; };
 		D37D5B1C1C28C57000F19BAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D37D5B1B1C28C57000F19BAF /* Assets.xcassets */; };
 		D37D5B1F1C28C57000F19BAF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D37D5B1D1C28C57000F19BAF /* MainMenu.xib */; };
+		D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */; };
+		D37D5B291C28CC8B00F19BAF /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B281C28CC8B00F19BAF /* PCH_Defs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +20,8 @@
 		D37D5B1B1C28C57000F19BAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D37D5B1E1C28C57000F19BAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		D37D5B201C28C57000F19BAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_AppController.swift; sourceTree = "<group>"; };
+		D37D5B281C28CC8B00F19BAF /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Defs.swift; path = ../../TransformerModel/TransformerModel/PCH_Defs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +54,9 @@
 		D37D5B181C28C57000F19BAF /* ImpulseInterpreter */ = {
 			isa = PBXGroup;
 			children = (
+				D37D5B281C28CC8B00F19BAF /* PCH_Defs.swift */,
 				D37D5B191C28C57000F19BAF /* AppDelegate.swift */,
+				D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */,
 				D37D5B1B1C28C57000F19BAF /* Assets.xcassets */,
 				D37D5B1D1C28C57000F19BAF /* MainMenu.xib */,
 				D37D5B201C28C57000F19BAF /* Info.plist */,
@@ -128,7 +134,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D37D5B291C28CC8B00F19BAF /* PCH_Defs.swift in Sources */,
 				D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */,
+				D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +193,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-D DEBUG";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};

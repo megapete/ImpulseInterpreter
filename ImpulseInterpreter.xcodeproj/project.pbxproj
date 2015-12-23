@@ -13,6 +13,7 @@
 		D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */; };
 		D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */; };
 		D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */; };
+		D3804C1F1C2AE39300E28979 /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_AppController.swift; sourceTree = "<group>"; };
 		D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_NumericalData.swift; sourceTree = "<group>"; };
 		D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_GraphView.swift; sourceTree = "<group>"; };
+		D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_Defs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		D37D5B181C28C57000F19BAF /* ImpulseInterpreter */ = {
 			isa = PBXGroup;
 			children = (
+				D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */,
 				D37D5B191C28C57000F19BAF /* AppDelegate.swift */,
 				D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */,
 				D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */,
@@ -138,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */,
+				D3804C1F1C2AE39300E28979 /* PCH_Defs.swift in Sources */,
 				D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */,
 				D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */,
 				D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */,
@@ -282,6 +286,7 @@
 				D37D5B251C28C57000F19BAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

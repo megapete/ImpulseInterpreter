@@ -15,13 +15,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let appController = PCH_AppController()
 
     @IBOutlet weak var window: NSWindow!
-
+    
     /// Menu handlers (these just call the AppController functions of the same name
     @IBAction func handleOpenFile(sender: AnyObject) {
         
         appController.handleOpenFile()
         
         appController.getDataFromFile()
+    }
+    
+    @IBAction func handleShoot(sender: AnyObject) {
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {

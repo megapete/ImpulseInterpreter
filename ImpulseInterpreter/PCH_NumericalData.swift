@@ -22,6 +22,12 @@ class PCH_NumericalData {
     /// A 2D array of voltages, where the first index is the time step number and the second index is the disk number (actually, minus 1 compared to the disk number deined in the file)
     var voltage:[[Double]]
     
+    /// The maximum voltage in the file (used to scale the output graph)
+    var maxVoltage:Double = 0.0
+    
+    /// The minimum voltage in the file (used to scale the output graph)
+    var minVoltage:Double = 0.0
+    
     /**
         The designated initializer for the class.
     
@@ -52,9 +58,6 @@ class PCH_NumericalData {
         
         // The disk voltage names start at line 8 and go until the line with the string "Value:" in it.
         var lineCount = 8
-        
-        
-        
         var nextLine = linesArray[lineCount]
         
         while (!nextLine.containsString("Values:"))
@@ -71,6 +74,9 @@ class PCH_NumericalData {
         nextLine = linesArray[lineCount]
         let diskCount = diskID.count
         
+        var maxVolts = -DBL_MAX
+        var minVolts = DBL_MAX
+        
         for _:UInt in 0..<points
         {
             // the first line is special - it holds the point index (which we already have as the value i) and the time of the point.
@@ -84,7 +90,20 @@ class PCH_NumericalData {
             for _ in 0..<diskCount
             {
                 nextLine = nextLine.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                innerArray.append(Double(nextLine)!)
+                
+                let nextVoltage = Double(nextLine)!
+                
+                if (nextVoltage > maxVolts)
+                {
+                    maxVolts = nextVoltage
+                }
+                
+                if (nextVoltage < minVolts)
+                {
+                    minVolts = nextVoltage
+                }
+                
+                innerArray.append(nextVoltage)
                 
                 lineCount++
                 nextLine = linesArray[lineCount]
@@ -96,6 +115,9 @@ class PCH_NumericalData {
             lineCount++
             nextLine = linesArray[lineCount]
         }
+        
+        maxVoltage = maxVolts
+        minVoltage = minVolts
         
     }
     

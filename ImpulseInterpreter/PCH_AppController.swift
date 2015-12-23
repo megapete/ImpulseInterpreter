@@ -17,6 +17,14 @@ class PCH_AppController: NSObject {
     
     var numericalData:PCH_NumericalData?
     
+    /// The graph view for the program
+    @IBOutlet var graphView: PCH_GraphView!
+    
+    /// Override for the awakeFromNib function. We use it to stuff a reference to this controller into the graph view
+    override func awakeFromNib()
+    {
+        graphView.theController = self
+    }
     
     /// Function to extract the numerical data from the file
     func getDataFromFile()

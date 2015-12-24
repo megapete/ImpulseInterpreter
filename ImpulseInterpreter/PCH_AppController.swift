@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PCH_AppController: NSObject {
+class PCH_AppController: NSObject, NSWindowDelegate {
     
     /// The current file as a file handle, URL, and NSString. Any of these fields can be nil if there is no file currently defined (like at program launch).
     var currentFileHandle:NSFileHandle?
@@ -17,13 +17,57 @@ class PCH_AppController: NSObject {
     
     var numericalData:PCH_NumericalData?
     
-    /// The graph view for the program
-    @IBOutlet var graphView: PCH_GraphView!
+    @IBOutlet weak var graphView: PCH_GraphView!
+    
+    
+    /// Show the impulse shot
+    func handleShoot()
+    {
+        guard let numData = numericalData
+        else
+        {
+            return
+        }
+        
+        guard let gView = graphView
+        else
+        {
+            DLog("What the fuck?")
+            return
+        }
+        
+        gView.voltages = numData.voltage[10]
+        gView.needsDisplay = true
+        
+    }
     
     /// Override for the awakeFromNib function. We use it to stuff a reference to this controller into the graph view
     override func awakeFromNib()
     {
         graphView.theController = self
+    }
+    
+    /// Delegate function for window resizing
+    func windowDidResize(notification: NSNotification)
+    {
+        // we need to update the scale of the graph view, so we let the view know that
+        graphView.ZoomAll()
+        
+    }
+    
+    /// Function to get the maximum and minimum voltages in the current file
+    func getExtremes() -> (maxV:Double, minV:Double)
+    {
+        var maxResult:Double = 0.0
+        var minResult:Double = 0.0
+        
+        if let numData = numericalData
+        {
+            maxResult = numData.maxVoltage
+            minResult = numData.minVoltage
+        }
+        
+        return (maxResult, minResult)
     }
     
     /// Function to extract the numerical data from the file

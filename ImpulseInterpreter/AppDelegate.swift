@@ -24,7 +24,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.getDataFromFile()
     }
     
-    @IBAction func handleShoot(sender: AnyObject) {
+    @IBAction func handleShoot(sender: AnyObject)
+    {
+        appController.handleShoot()
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {

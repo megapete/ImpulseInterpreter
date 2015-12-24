@@ -19,7 +19,7 @@
         </customObject>
         <customObject id="FIr-OJ-4qZ" customClass="PCH_AppController" customModule="ImpulseInterpreter" customModuleProvider="target">
             <connections>
-                <outlet property="graphView" destination="EiT-Mj-1SZ" id="G3y-Bw-hQa"/>
+                <outlet property="graphView" destination="qFj-bg-0jg" id="ff4-Lz-H8v"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -428,10 +428,18 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="846" height="563"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
-            <view key="contentView" id="EiT-Mj-1SZ" customClass="PCH_GraphView" customModule="ImpulseInterpreter" customModuleProvider="target">
+            <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="846" height="563"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFj-bg-0jg" customClass="PCH_GraphView" customModule="ImpulseInterpreter" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="846" height="563"/>
+                    </customView>
+                </subviews>
             </view>
+            <connections>
+                <outlet property="delegate" destination="FIr-OJ-4qZ" id="GHp-tI-QX1"/>
+            </connections>
             <point key="canvasLocation" x="646" y="736.5"/>
         </window>
     </objects>

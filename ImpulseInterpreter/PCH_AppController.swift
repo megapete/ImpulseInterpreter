@@ -17,8 +17,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     var numericalData:PCH_NumericalData?
     
-    @IBOutlet weak var graphView: PCH_GraphView!
-    
+    @IBOutlet var graphView: PCH_GraphView!
     
     /// Show the impulse shot
     func handleShoot()

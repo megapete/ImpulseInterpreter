@@ -29,15 +29,19 @@ class PCH_GraphView: NSView {
             return
         }
         
-        let xDisks = 1.1 * CGFloat((theController?.numericalData?.diskID.count)!)
+        let xDisks = 1.05 * CGFloat((theController?.numericalData?.diskID.count)!)
 
-        currentScale.x = Double(xDisks / (self.frame.size.width - 2.0 * inset))
+        currentScale.x = Double(xDisks / (self.frame.size.width - 3.0 * inset))
         
-        let yOverall = 1.1 * CGFloat((theController?.getExtremes().maxV)! - (theController?.getExtremes().minV)!)
+        let yOverall = 1.05 * CGFloat((theController?.getExtremes().maxV)! - (theController?.getExtremes().minV)!)
         
-        currentScale.y = Double(yOverall / (self.frame.size.height - 2.0 * inset))
+        currentScale.y = Double(yOverall / (self.frame.size.height - 3.0 * inset))
     }
-
+    
+    override func viewDidMoveToSuperview() {
+        DLog("We came here")
+    }
+    
     /// Override of the drawing method
     override func drawRect(dirtyRect: NSRect)
     {
@@ -73,7 +77,7 @@ class PCH_GraphView: NSView {
         
         for i in 1..<numDisks
         {
-            path.lineToPoint(NSMakePoint(origin.x + CGFloat(i) / CGFloat(numDisks) / CGFloat(currentScale.x), origin.y + CGFloat(vPoints[i] / currentScale.y)))
+            path.lineToPoint(NSMakePoint(origin.x + CGFloat(i) / CGFloat(currentScale.x), origin.y + CGFloat(vPoints[i] / currentScale.y)))
         }
         
         path.stroke()

@@ -21,7 +21,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         appController.handleOpenFile()
         
-        appController.getDataFromFile()
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), {
+                self.appController.getDataFromFile()
+            });
+        
+        DLog("We have reached here")
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        appController.graphView = (self.window.contentView?.subviews[0] as! PCH_GraphView)
+        appController.graphView?.theController = appController
     }
     
     @IBAction func handleShoot(sender: AnyObject)

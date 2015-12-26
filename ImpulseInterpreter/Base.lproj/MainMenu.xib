@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15D9c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
@@ -17,11 +17,7 @@
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
-        <customObject id="FIr-OJ-4qZ" customClass="PCH_AppController" customModule="ImpulseInterpreter" customModuleProvider="target">
-            <connections>
-                <outlet property="graphView" destination="qFj-bg-0jg" id="ff4-Lz-H8v"/>
-            </connections>
-        </customObject>
+        <customObject id="FIr-OJ-4qZ" customClass="PCH_AppController" customModule="ImpulseInterpreter" customModuleProvider="target"/>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
@@ -426,21 +422,21 @@
         <window title="ImpulseInterpreter" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="846" height="563"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="contentRect" x="335" y="390" width="1189" height="798"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="846" height="563"/>
+                <rect key="frame" x="0.0" y="0.0" width="1189" height="798"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFj-bg-0jg" customClass="PCH_GraphView" customModule="ImpulseInterpreter" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="846" height="563"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1189" height="798"/>
                     </customView>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="FIr-OJ-4qZ" id="GHp-tI-QX1"/>
             </connections>
-            <point key="canvasLocation" x="646" y="736.5"/>
+            <point key="canvasLocation" x="598.5" y="693"/>
         </window>
     </objects>
 </document>

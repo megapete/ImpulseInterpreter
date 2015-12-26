@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PCH_NumericalData {
+class PCH_NumericalData /* NSObject , NSCoding */ {
 
     /// The total number of time steps in the data file
     let numTimeSteps:UInt
@@ -127,12 +127,20 @@ class PCH_NumericalData {
     }
     
     /**
+        Required initializer for creating objects from files (NSCoding)
+
+    required init?(coder aDecoder: NSCoder)
+    {
+        return nil
+    }
+    */
+    /**
         Function to return the voltage for a given index into the diskID array at the given timestep
      
         - parameter diskIndex: The index into the diskID array for the required disk
         - parameter timestep: The time step that interests us, must be in the range 0..<numTimeSteps
     */
-    func getVoltage(diskIndex:Int, timestep:Int) -> Double
+    func getVoltage(diskIndex diskIndex:Int, timestep:Int) -> Double
     {
         ZAssert(timestep < Int(numTimeSteps) && timestep >= 0, message: "Illegal timestep")
         ZAssert(diskIndex < diskID.count && diskIndex >= 0, message: "Illegal disk index")
@@ -147,7 +155,7 @@ class PCH_NumericalData {
         - parameter disk: The disk ID in the form "V(XXIYYY)" where YYY is a three-digit integer and XX is the name of the coil
         - parameter timestep: The time step that interests us, must be in the range 0..<numTimeSteps
     */
-    func getVoltage(disk:String, timestep:Int) -> Double
+    func getVoltage(disk disk:String, timestep:Int) -> Double
     {
         ZAssert(timestep < Int(numTimeSteps) && timestep >= 0, message: "Illegal timestep")
         

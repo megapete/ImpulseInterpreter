@@ -17,17 +17,28 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     var numericalData:PCH_NumericalData?
     
-    @IBOutlet var graphView: PCH_GraphView!
+    var graphView:PCH_GraphView?
+    
+    var shotTimer = NSTimer()
+    var shotTimeStep = 0
+    
+    func advanceShotTimeStep()
+    {
+        if (shotTimeStep > Int(numericalData!.numTimeSteps))
+        {
+            DLog("Done with shot")
+            shotTimer.invalidate()
+            return
+        }
+        
+        graphView!.voltages = numericalData!.voltage[shotTimeStep]
+        graphView!.needsDisplay = true
+        shotTimeStep += 100
+    }
     
     /// Show the impulse shot
     func handleShoot()
     {
-        guard let numData = numericalData
-        else
-        {
-            return
-        }
-        
         guard let gView = graphView
         else
         {
@@ -35,22 +46,25 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return
         }
         
-        gView.voltages = numData.voltage[10]
-        gView.needsDisplay = true
+        gView.ZoomAll()
+        
+        shotTimeStep = 0
+        shotTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target:self, selector: Selector("advanceShotTimeStep"), userInfo: nil, repeats: true)
         
     }
     
     /// Override for the awakeFromNib function. We use it to stuff a reference to this controller into the graph view
     override func awakeFromNib()
     {
-        graphView.theController = self
+        // DLog("Setting controller in view!")
+        // graphView!.theController = self
     }
     
     /// Delegate function for window resizing
     func windowDidResize(notification: NSNotification)
     {
         // we need to update the scale of the graph view, so we let the view know that
-        graphView.ZoomAll()
+        // graphView!.ZoomAll()
         
     }
     
@@ -130,7 +144,10 @@ class PCH_AppController: NSObject, NSWindowDelegate {
                 return
             }
             
+            
             DLog("We have a usable file!")
+            
+            // graphView.needsDisplay = true
         }
     }
 

@@ -43,23 +43,23 @@ class PCH_GraphView: NSView {
     }
     
     /// Override of the drawing method
-    override func drawRect(dirtyRect: NSRect)
+    override func draw(_ dirtyRect: NSRect)
     {
         // required call to super func
-        super.drawRect(dirtyRect)
+        super.draw(dirtyRect)
 
         // Drawing code here.
         // Draw the axes. The Y-axis is always located at the left of the window so we'll start with that.
-        NSColor.blackColor().set()
+        NSColor.black.set()
         let path = NSBezierPath()
-        path.moveToPoint(NSMakePoint(inset * 1.5, inset / 2.0))
-        path.lineToPoint(NSMakePoint(inset * 1.5, self.frame.size.height - inset))
+        path.move(to: NSMakePoint(inset * 1.5, inset / 2.0))
+        path.line(to: NSMakePoint(inset * 1.5, self.frame.size.height - inset))
         path.stroke()
         
         let xAxisHeight = 0.0 - CGFloat((theController?.getExtremes().minV)!)
         path.removeAllPoints()
-        path.moveToPoint(NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
-        path.lineToPoint(NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
+        path.move(to: NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
+        path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
         path.stroke()
         
         let origin:NSPoint = NSMakePoint(inset * 1.5, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x))
@@ -71,13 +71,13 @@ class PCH_GraphView: NSView {
         }
         
         let numDisks = vPoints.count
-        NSColor.redColor().set()
+        NSColor.red.set()
         path.removeAllPoints()
-        path.moveToPoint(NSMakePoint(origin.x, origin.y + CGFloat(vPoints[0] / currentScale.y)))
+        path.move(to: NSMakePoint(origin.x, origin.y + CGFloat(vPoints[0] / currentScale.y)))
         
         for i in 1..<numDisks
         {
-            path.lineToPoint(NSMakePoint(origin.x + CGFloat(i) / CGFloat(currentScale.x), origin.y + CGFloat(vPoints[i] / currentScale.y)))
+            path.line(to: NSMakePoint(origin.x + CGFloat(i) / CGFloat(currentScale.x), origin.y + CGFloat(vPoints[i] / currentScale.y)))
         }
         
         path.stroke()

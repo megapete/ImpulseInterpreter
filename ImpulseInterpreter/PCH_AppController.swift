@@ -7,19 +7,39 @@
 //
 
 import Cocoa
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class PCH_AppController: NSObject, NSWindowDelegate {
     
     /// The current file as a file handle, URL, and NSString. Any of these fields can be nil if there is no file currently defined (like at program launch).
-    var currentFileHandle:NSFileHandle?
-    var currentFileURL:NSURL?
+    var currentFileHandle:FileHandle?
+    var currentFileURL:URL?
     var currentFileString:NSString?
     
     var numericalData:PCH_NumericalData?
     
     var graphView:PCH_GraphView?
     
-    var shotTimer = NSTimer()
+    var shotTimer = Timer()
     var shotTimeStep = 0
     
     func advanceShotTimeStep()
@@ -43,11 +63,11 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     {
         var outputFileString = String()
         
-        for var i=0; i<self.numericalData?.diskID.count; i++
+        for var i=0; i<self.numericalData?.diskID.count; i += 1
         {
             var maxTStep = -1.0
             var maxV = 0.0
-            for var j=0; j<Int((self.numericalData?.numTimeSteps)!); j++
+            for j in 0 ..< Int((self.numericalData?.numTimeSteps)!)
             {
                 let nextV = self.numericalData?.getVoltage(diskIndex: i, timestep: j)
                 
@@ -69,7 +89,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         if (savePanel.runModal() == NSFileHandlingPanelOKButton)
         {
-            guard let chosenFile:NSURL = savePanel.URL
+            guard let chosenFile:URL = savePanel.url
             else
             {
                 DLog("There is no URL?!?!?")
@@ -77,7 +97,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
             
             do {
-                try outputFileString.writeToURL(chosenFile, atomically: true, encoding: NSUTF8StringEncoding)
+                try outputFileString.write(to: chosenFile, atomically: true, encoding: String.Encoding.utf8)
             }
             catch {
                 ALog("Could not write file!")
@@ -91,11 +111,11 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     {
         var outputFileString = String()
         
-        for var i=0; i<(self.numericalData?.diskID.count)! - 1; i++
+        for i in 0 ..< (self.numericalData?.diskID.count)! - 1
         {
             var maxTStep = -1.0
             var maxVdiff = 0.0
-            for var j=0; j<Int((self.numericalData?.numTimeSteps)!); j++
+            for j in 0 ..< Int((self.numericalData?.numTimeSteps)!)
             {
                 let nextV1 = self.numericalData?.getVoltage(diskIndex: i, timestep: j)
                 let nextV2 = self.numericalData?.getVoltage(diskIndex: i+1, timestep: j)
@@ -118,7 +138,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         if (savePanel.runModal() == NSFileHandlingPanelOKButton)
         {
-            guard let chosenFile:NSURL = savePanel.URL
+            guard let chosenFile:URL = savePanel.url
                 else
             {
                 DLog("There is no URL?!?!?")
@@ -126,7 +146,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
             
             do {
-                try outputFileString.writeToURL(chosenFile, atomically: true, encoding: NSUTF8StringEncoding)
+                try outputFileString.write(to: chosenFile, atomically: true, encoding: String.Encoding.utf8)
             }
             catch {
                 ALog("Could not write file!")
@@ -142,7 +162,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         var maxV = -1000.0
         var initTime = 0
-        for var j=0; j<Int((self.numericalData?.numTimeSteps)!); j++
+        for j in 0 ..< Int((self.numericalData?.numTimeSteps)!)
         {
             let nextV = self.numericalData?.getVoltage(diskIndex: 0, timestep: j)
             
@@ -159,7 +179,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         var outputFileString = String(format: "Time: %0.7E\n", (self.numericalData?.time[initTime])!)
         
-        for var i=0; i<self.numericalData?.diskID.count; i++
+        for var i=0; i<self.numericalData?.diskID.count; i += 1
         {
             let volts = self.numericalData?.getVoltage(diskIndex: i, timestep: initTime)
             let name = self.numericalData?.diskID[i]
@@ -175,7 +195,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         if (savePanel.runModal() == NSFileHandlingPanelOKButton)
         {
-            guard let chosenFile:NSURL = savePanel.URL
+            guard let chosenFile:URL = savePanel.url
                 else
             {
                 DLog("There is no URL?!?!?")
@@ -183,7 +203,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
             
             do {
-                try outputFileString.writeToURL(chosenFile, atomically: true, encoding: NSUTF8StringEncoding)
+                try outputFileString.write(to: chosenFile, atomically: true, encoding: String.Encoding.utf8)
             }
             catch {
                 ALog("Could not write file!")
@@ -206,7 +226,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         gView.ZoomAll()
         
         shotTimeStep = 0
-        shotTimer = NSTimer.scheduledTimerWithTimeInterval(0.01, target:self, selector: Selector("advanceShotTimeStep"), userInfo: nil, repeats: true)
+        shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
         
     }
     
@@ -218,7 +238,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     }
     
     /// Delegate function for window resizing
-    func windowDidResize(notification: NSNotification)
+    func windowDidResize(_ notification: Notification)
     {
         // we need to update the scale of the graph view, so we let the view know that
         // graphView!.ZoomAll()
@@ -268,7 +288,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             let oldFileURL = currentFileURL
             let oldFileString = currentFileString
             
-            guard let chosenFile:NSURL = getFilePanel.URLs[0]
+            guard let chosenFile:URL = getFilePanel.urls[0]
             else
             {
                 DLog("There is no URL?!?!?")
@@ -277,7 +297,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             
             currentFileURL = chosenFile
             
-            guard let chosenFileHandle = try? NSFileHandle(forReadingFromURL: chosenFile)
+            guard let chosenFileHandle = try? FileHandle(forReadingFrom: chosenFile)
             else
             {
                 DLog("Could not open file for reading")
@@ -317,7 +337,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         // Try and load the whole file into a string
-        guard let stringFile = try? NSString(contentsOfURL: currentFileURL!, encoding: NSUTF8StringEncoding)
+        guard let stringFile = try? NSString(contentsOf: currentFileURL!, encoding: String.Encoding.utf8.rawValue)
         else
         {
             DLog("Couldn't interpret the file as a string")
@@ -325,7 +345,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         // we look for a few required strings 
-        let isValid = stringFile.containsString("Title") && stringFile.containsString("Plotname:") && stringFile.containsString("Flags:") && stringFile.containsString("No. Variables:") && stringFile.containsString("No. Points:")
+        let isValid = stringFile.contains("Title") && stringFile.contains("Plotname:") && stringFile.contains("Flags:") && stringFile.contains("No. Variables:") && stringFile.contains("No. Points:")
         
         // That's enough for now - if we have all those, we'll assume that this is a valid file
         if (!isValid)

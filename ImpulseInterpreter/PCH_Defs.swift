@@ -20,7 +20,7 @@ import Foundation
     - parameter line: The line number of the file where the debug message was invoked
 
 */
-func DLog(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__)
+func DLog(_ message:String, file:String = #file, function:String = #function, line:Int = #line)
 {
     #if DEBUG
         
@@ -39,7 +39,7 @@ func DLog(message:String, file:String = __FILE__, function:String = __FUNCTION__
     - parameter line: The line number of the file where the debug message was invoked
 
 */
-func ALog(message:String, file:String = __FILE__, function:String = __FUNCTION__, line:Int = __LINE__)
+func ALog(_ message:String, file:String = #file, function:String = #function, line:Int = #line)
 {
     #if DEBUG
     
@@ -60,7 +60,7 @@ func ALog(message:String, file:String = __FILE__, function:String = __FUNCTION__
     - parameter condition: The condition that must be true to not assert
     - parameter message: The message to show if condition is false
 */
-func ZAssert(condition:Bool, message:String)
+func ZAssert(_ condition:Bool, message:String)
 {
     if !condition
     {

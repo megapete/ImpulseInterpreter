@@ -40,10 +40,10 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         voltage = Array(Array())
         
         // The first thing we'll do is split the string into components where each line is a component
-        let linesArray = dataString.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        let linesArray = dataString.components(separatedBy: CharacterSet.newlines)
         
         // We get at the line (5) that holds the number of time steps
-        let numStepsLine = linesArray[5].componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let numStepsLine = linesArray[5].components(separatedBy: CharacterSet.whitespaces)
         
         guard let points = UInt(numStepsLine[2])
         else
@@ -60,17 +60,17 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         var lineCount = 8
         var nextLine = linesArray[lineCount]
         
-        while (!nextLine.containsString("Values:"))
+        while (!nextLine.contains("Values:"))
         {
-            nextLine = nextLine.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            let lineComponents = nextLine.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            diskID.append(lineComponents[1].uppercaseString)
-            lineCount++
+            nextLine = nextLine.trimmingCharacters(in: CharacterSet.whitespaces)
+            let lineComponents = nextLine.components(separatedBy: CharacterSet.whitespaces)
+            diskID.append(lineComponents[1].uppercased())
+            lineCount += 1
             nextLine = linesArray[lineCount]
         }
         
         // bump the line counter past the "Values:" line
-        lineCount++
+        lineCount += 1
         nextLine = linesArray[lineCount]
         let diskCount = diskID.count
         
@@ -85,16 +85,16 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             }
             
             // the first line is special - it holds the point index (which we already have as the value i) and the time of the point.
-            nextLine = nextLine.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            let lineComponents = nextLine.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            nextLine = nextLine.trimmingCharacters(in: CharacterSet.whitespaces)
+            let lineComponents = nextLine.components(separatedBy: CharacterSet.whitespaces)
             time.append(Double(lineComponents[1])!)
-            lineCount++
+            lineCount += 1
             nextLine = linesArray[lineCount]
             
             var innerArray = [Double]()
             for _ in 0..<diskCount
             {
-                nextLine = nextLine.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                nextLine = nextLine.trimmingCharacters(in: CharacterSet.whitespaces)
                 
                 let nextVoltage = Double(nextLine)!
                 
@@ -110,14 +110,14 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 
                 innerArray.append(nextVoltage)
                 
-                lineCount++
+                lineCount += 1
                 nextLine = linesArray[lineCount]
             }
             
             voltage.append(innerArray)
             
             // bump the index past the blank line
-            lineCount++
+            lineCount += 1
             nextLine = linesArray[lineCount]
         }
         
@@ -140,7 +140,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         - parameter diskIndex: The index into the diskID array for the required disk
         - parameter timestep: The time step that interests us, must be in the range 0..<numTimeSteps
     */
-    func getVoltage(diskIndex diskIndex:Int, timestep:Int) -> Double
+    func getVoltage(diskIndex:Int, timestep:Int) -> Double
     {
         ZAssert(timestep < Int(numTimeSteps) && timestep >= 0, message: "Illegal timestep")
         ZAssert(diskIndex < diskID.count && diskIndex >= 0, message: "Illegal disk index")
@@ -155,13 +155,13 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         - parameter disk: The disk ID in the form "V(XXIYYY)" where YYY is a three-digit integer and XX is the name of the coil
         - parameter timestep: The time step that interests us, must be in the range 0..<numTimeSteps
     */
-    func getVoltage(disk disk:String, timestep:Int) -> Double
+    func getVoltage(disk:String, timestep:Int) -> Double
     {
         ZAssert(timestep < Int(numTimeSteps) && timestep >= 0, message: "Illegal timestep")
         
         var result:Double = 0.0
         
-        if let indexOfDisk = diskID.indexOf(disk)
+        if let indexOfDisk = diskID.index(of: disk)
         {
             result = voltage[timestep][indexOfDisk]
         }
@@ -183,7 +183,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         for nextID in diskID
         {
             // Swift Ranges (and therefore substring extraction) is badly documented. I got this from Stack Overflow
-            let testString = nextID[nextID.startIndex.advancedBy(2)...nextID.startIndex.advancedBy(3)].uppercaseString
+            let testString = nextID[nextID.characters.index(nextID.startIndex, offsetBy: 2)...nextID.characters.index(nextID.startIndex, offsetBy: 3)].uppercased()
             
             if !result.contains(testString)
             {

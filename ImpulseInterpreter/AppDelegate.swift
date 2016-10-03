@@ -17,11 +17,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     
     /// Menu handlers (these just call the AppController functions of the same name
-    @IBAction func handleOpenFile(sender: AnyObject) {
+    @IBAction func handleOpenFile(_ sender: AnyObject) {
         
         appController.handleOpenFile()
         
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async(execute: {
                 self.appController.getDataFromFile()
             });
         
@@ -34,31 +34,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.graphView?.theController = appController
     }
     
-    @IBAction func handleShoot(sender: AnyObject)
+    @IBAction func handleShoot(_ sender: AnyObject)
     {
         appController.handleShoot()
     }
     
-    @IBAction func handleSaveMaxVoltages(sender: AnyObject)
+    @IBAction func handleSaveMaxVoltages(_ sender: AnyObject)
     {
         appController.handleSaveMaxVoltages()
     }
 
-    @IBAction func handleSaveMaxInterdiskV(sender: AnyObject)
+    @IBAction func handleSaveMaxInterdiskV(_ sender: AnyObject)
     {
         appController.handleMaxInterdiskV()
     }
     
-    @IBAction func handleSaveInitialDistribution(sender: AnyObject)
+    @IBAction func handleSaveInitialDistribution(_ sender: AnyObject)
     {
         appController.handleInitialDistribution()
     }
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
 

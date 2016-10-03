@@ -38,7 +38,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     {
         appController.handleShoot()
     }
+    
+    @IBAction func handleSaveMaxVoltages(sender: AnyObject)
+    {
+        appController.handleSaveMaxVoltages()
+    }
 
+    @IBAction func handleSaveMaxInterdiskV(sender: AnyObject)
+    {
+        appController.handleMaxInterdiskV()
+    }
+    
+    @IBAction func handleSaveInitialDistribution(sender: AnyObject)
+    {
+        appController.handleInitialDistribution()
+    }
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
     }

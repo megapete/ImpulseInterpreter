@@ -36,6 +36,163 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         shotTimeStep += 100
     }
     
+    /** Save the maximum voltages for each "disk" in the data file (as a CSV file). The format of each line of the file is:
+        DISKID, TIME_STEP_MAX, MAX_VOLTAGE
+    */
+    func handleSaveMaxVoltages()
+    {
+        var outputFileString = String()
+        
+        for var i=0; i<self.numericalData?.diskID.count; i++
+        {
+            var maxTStep = -1.0
+            var maxV = 0.0
+            for var j=0; j<Int((self.numericalData?.numTimeSteps)!); j++
+            {
+                let nextV = self.numericalData?.getVoltage(diskIndex: i, timestep: j)
+                
+                if (nextV > maxV)
+                {
+                    maxTStep = (self.numericalData?.time[j])!
+                    maxV = nextV!
+                }
+            }
+            
+            let nextline = String(format: "%@,%0.7E,%0.7E\n", (self.numericalData?.diskID[i])!, maxTStep, maxV)
+            outputFileString += nextline
+        }
+        
+        let savePanel = NSSavePanel()
+        
+        savePanel.canCreateDirectories = true
+        savePanel.allowedFileTypes = ["txt"]
+        
+        if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+        {
+            guard let chosenFile:NSURL = savePanel.URL
+            else
+            {
+                DLog("There is no URL?!?!?")
+                return
+            }
+            
+            do {
+                try outputFileString.writeToURL(chosenFile, atomically: true, encoding: NSUTF8StringEncoding)
+            }
+            catch {
+                ALog("Could not write file!")
+            }
+
+        }
+        
+    }
+    
+    func handleMaxInterdiskV()
+    {
+        var outputFileString = String()
+        
+        for var i=0; i<(self.numericalData?.diskID.count)! - 1; i++
+        {
+            var maxTStep = -1.0
+            var maxVdiff = 0.0
+            for var j=0; j<Int((self.numericalData?.numTimeSteps)!); j++
+            {
+                let nextV1 = self.numericalData?.getVoltage(diskIndex: i, timestep: j)
+                let nextV2 = self.numericalData?.getVoltage(diskIndex: i+1, timestep: j)
+                
+                if (fabs(nextV1! - nextV2!) > maxVdiff)
+                {
+                    maxTStep = (self.numericalData?.time[j])!
+                    maxVdiff = fabs(nextV1! - nextV2!)
+                }
+            }
+            
+            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", (self.numericalData?.diskID[i])!, (self.numericalData?.diskID[i+1])!, maxTStep, maxVdiff)
+            outputFileString += nextline
+        }
+        
+        let savePanel = NSSavePanel()
+        
+        savePanel.canCreateDirectories = true
+        savePanel.allowedFileTypes = ["txt"]
+        
+        if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+        {
+            guard let chosenFile:NSURL = savePanel.URL
+                else
+            {
+                DLog("There is no URL?!?!?")
+                return
+            }
+            
+            do {
+                try outputFileString.writeToURL(chosenFile, atomically: true, encoding: NSUTF8StringEncoding)
+            }
+            catch {
+                ALog("Could not write file!")
+            }
+            
+        }
+    }
+    
+    func handleInitialDistribution()
+    {
+        // This function traces the voltage of the first entry in the disk array until it reaches a maximum, and outputs the voltages of that node and all the rest at that timestep
+        
+        
+        var maxV = -1000.0
+        var initTime = 0
+        for var j=0; j<Int((self.numericalData?.numTimeSteps)!); j++
+        {
+            let nextV = self.numericalData?.getVoltage(diskIndex: 0, timestep: j)
+            
+            if (nextV < maxV)
+            {
+                initTime = j
+                break
+            }
+            else
+            {
+                maxV = nextV!
+            }
+        }
+        
+        var outputFileString = String(format: "Time: %0.7E\n", (self.numericalData?.time[initTime])!)
+        
+        for var i=0; i<self.numericalData?.diskID.count; i++
+        {
+            let volts = self.numericalData?.getVoltage(diskIndex: i, timestep: initTime)
+            let name = self.numericalData?.diskID[i]
+            
+            outputFileString += String(format: "%@,%0.7E\n", name!, volts!)
+            
+        }
+        
+        let savePanel = NSSavePanel()
+        
+        savePanel.canCreateDirectories = true
+        savePanel.allowedFileTypes = ["txt"]
+        
+        if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+        {
+            guard let chosenFile:NSURL = savePanel.URL
+                else
+            {
+                DLog("There is no URL?!?!?")
+                return
+            }
+            
+            do {
+                try outputFileString.writeToURL(chosenFile, atomically: true, encoding: NSUTF8StringEncoding)
+            }
+            catch {
+                ALog("Could not write file!")
+            }
+            
+        }
+        
+    }
+    
     /// Show the impulse shot
     func handleShoot()
     {

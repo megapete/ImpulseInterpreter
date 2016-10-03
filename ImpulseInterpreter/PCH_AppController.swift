@@ -61,24 +61,30 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     */
     func handleSaveMaxVoltages()
     {
+        guard numericalData != nil else {
+            DLog("numericalData us undefined!")
+            return
+        }
+        
         var outputFileString = String()
         
-        for var i=0; i<self.numericalData?.diskID.count; i += 1
+        for i in 0..<self.numericalData!.diskID.count
+        // for var i=0; i<self.numericalData?.diskID.count; i += 1
         {
             var maxTStep = -1.0
             var maxV = 0.0
-            for j in 0 ..< Int((self.numericalData?.numTimeSteps)!)
+            for j in 0 ..< Int((self.numericalData!.numTimeSteps))
             {
-                let nextV = self.numericalData?.getVoltage(diskIndex: i, timestep: j)
+                let nextV = self.numericalData!.getVoltage(diskIndex: i, timestep: j)
                 
                 if (nextV > maxV)
                 {
-                    maxTStep = (self.numericalData?.time[j])!
-                    maxV = nextV!
+                    maxTStep = (self.numericalData!.time[j])
+                    maxV = nextV
                 }
             }
             
-            let nextline = String(format: "%@,%0.7E,%0.7E\n", (self.numericalData?.diskID[i])!, maxTStep, maxV)
+            let nextline = String(format: "%@,%0.7E,%0.7E\n", (self.numericalData!.diskID[i]), maxTStep, maxV)
             outputFileString += nextline
         }
         
@@ -109,25 +115,30 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     func handleMaxInterdiskV()
     {
+        guard numericalData != nil else {
+            DLog("numericalData us undefined!")
+            return
+        }
+        
         var outputFileString = String()
         
-        for i in 0 ..< (self.numericalData?.diskID.count)! - 1
+        for i in 0..<(self.numericalData!.diskID.count) - 1
         {
             var maxTStep = -1.0
             var maxVdiff = 0.0
-            for j in 0 ..< Int((self.numericalData?.numTimeSteps)!)
+            for j in 0 ..< Int((self.numericalData!.numTimeSteps))
             {
-                let nextV1 = self.numericalData?.getVoltage(diskIndex: i, timestep: j)
-                let nextV2 = self.numericalData?.getVoltage(diskIndex: i+1, timestep: j)
+                let nextV1 = self.numericalData!.getVoltage(diskIndex: i, timestep: j)
+                let nextV2 = self.numericalData!.getVoltage(diskIndex: i+1, timestep: j)
                 
-                if (fabs(nextV1! - nextV2!) > maxVdiff)
+                if (fabs(nextV1 - nextV2) > maxVdiff)
                 {
-                    maxTStep = (self.numericalData?.time[j])!
-                    maxVdiff = fabs(nextV1! - nextV2!)
+                    maxTStep = (self.numericalData!.time[j])
+                    maxVdiff = fabs(nextV1 - nextV2)
                 }
             }
             
-            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", (self.numericalData?.diskID[i])!, (self.numericalData?.diskID[i+1])!, maxTStep, maxVdiff)
+            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", (self.numericalData!.diskID[i]), (self.numericalData!.diskID[i+1]), maxTStep, maxVdiff)
             outputFileString += nextline
         }
         
@@ -159,12 +170,16 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     {
         // This function traces the voltage of the first entry in the disk array until it reaches a maximum, and outputs the voltages of that node and all the rest at that timestep
         
+        guard numericalData != nil else {
+            DLog("numericalData us undefined!")
+            return
+        }
         
         var maxV = -1000.0
         var initTime = 0
-        for j in 0 ..< Int((self.numericalData?.numTimeSteps)!)
+        for j in 0 ..< Int((self.numericalData!.numTimeSteps))
         {
-            let nextV = self.numericalData?.getVoltage(diskIndex: 0, timestep: j)
+            let nextV = self.numericalData!.getVoltage(diskIndex: 0, timestep: j)
             
             if (nextV < maxV)
             {
@@ -173,18 +188,18 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
             else
             {
-                maxV = nextV!
+                maxV = nextV
             }
         }
         
-        var outputFileString = String(format: "Time: %0.7E\n", (self.numericalData?.time[initTime])!)
+        var outputFileString = String(format: "Time: %0.7E\n", (self.numericalData!.time[initTime]))
         
-        for var i=0; i<self.numericalData?.diskID.count; i += 1
+        for i in 0..<self.numericalData!.diskID.count
         {
-            let volts = self.numericalData?.getVoltage(diskIndex: i, timestep: initTime)
-            let name = self.numericalData?.diskID[i]
+            let volts = self.numericalData!.getVoltage(diskIndex: i, timestep: initTime)
+            let name = self.numericalData!.diskID[i]
             
-            outputFileString += String(format: "%@,%0.7E\n", name!, volts!)
+            outputFileString += String(format: "%@,%0.7E\n", name, volts)
             
         }
         
@@ -288,13 +303,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             let oldFileURL = currentFileURL
             let oldFileString = currentFileString
             
-            guard let chosenFile:URL = getFilePanel.urls[0]
-            else
-            {
-                DLog("There is no URL?!?!?")
-                return
-            }
-            
+            let chosenFile:URL = getFilePanel.urls[0]
+           
             currentFileURL = chosenFile
             
             guard let chosenFileHandle = try? FileHandle(forReadingFrom: chosenFile)
@@ -306,7 +316,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             
             currentFileHandle = chosenFileHandle
             
-            DLog("Name of chosen file is " + chosenFile.path!)
+            DLog("Name of chosen file is " + chosenFile.path)
             
             // open the file and validate it
             if (!OpenAndValidateFile())

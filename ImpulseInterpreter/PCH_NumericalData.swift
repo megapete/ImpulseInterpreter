@@ -225,8 +225,9 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 lineCount += 1
                 nextLine = linesArray[lineCount]
             }
-            
         }
+        
+        DLog("Done")
     }
     
     /**

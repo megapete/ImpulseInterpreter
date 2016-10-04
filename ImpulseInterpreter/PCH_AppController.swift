@@ -279,6 +279,51 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         return (maxResult, minResult)
     }
     
+    /// Function to get an array of the current coil node IDs
+    func getCoilNodeIDs() -> [String]
+    {
+        let targetNodes = self.currentCoilID() + "i"
+        
+        guard let numData = numericalData
+        else
+        {
+            return Array()
+        }
+        
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        
+        return nodes
+    }
+    
+    /// Function to get the max and min voltages for the currently-selected coil
+    func getCoilExtremeVoltages() -> (maxV:Double, minV:Double)
+    {
+        var maxResult:Double = -DBL_MAX
+        var minResult:Double = DBL_MAX
+        
+        let targetNodes = self.currentCoilID() + "i"
+        
+        let nodes = numericalData?.nodeID.filter{$0.contains(targetNodes)}
+        
+        for nextNode in nodes!
+        {
+            let nextMinVal = numericalData?.nodalVoltages[nextNode]!.min()
+            if (nextMinVal < minResult)
+            {
+                minResult = nextMinVal!
+            }
+            
+            let nextMaxVal = numericalData?.nodalVoltages[nextNode]!.max()
+            if (nextMaxVal > maxResult)
+            {
+                maxResult = nextMaxVal!
+            }
+        }
+        
+        return (maxResult, minResult)
+        
+    }
+    
     /// Function to get the maximum and minimum currents in the current file
     func getExtremeCurrents() -> (maxI:Double, minI:Double)
     {
@@ -292,6 +337,18 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         return (maxResult, minResult)
+    }
+    
+    /// Function to get the current coil
+    func currentCoilID() -> String
+    {
+        guard let currCoil = currentCoilChoice
+        else
+        {
+            return ""
+        }
+        
+        return currCoil.title.lowercased()
     }
     
     /// Function to extract the numerical data from the file

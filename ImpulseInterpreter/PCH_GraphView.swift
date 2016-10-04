@@ -24,16 +24,22 @@ class PCH_GraphView: NSView {
     /// Function to calculate the scale factors for the graph
     func ZoomAll()
     {
-        if (theController!.numericalData == nil)
+        guard let appCont = self.theController
+        else
         {
             return
         }
         
-        let xDisks = 1.05 * CGFloat((theController?.numericalData?.diskID.count)!)
+        let xDisks = 1.05 * CGFloat((appCont.getCoilNodeIDs().count))
+        
+        if xDisks == 0.0
+        {
+            return
+        }
 
         currentScale.x = Double(xDisks / (self.frame.size.width - 3.0 * inset))
         
-        let yOverall = 1.05 * CGFloat((theController?.getExtremeVoltages().maxV)! - (theController?.getExtremeVoltages().minV)!)
+        let yOverall = 1.05 * CGFloat((appCont.getCoilExtremeVoltages().maxV) - (appCont.getCoilExtremeVoltages().minV))
         
         currentScale.y = Double(yOverall / (self.frame.size.height - 3.0 * inset))
     }
@@ -47,6 +53,12 @@ class PCH_GraphView: NSView {
     {
         // required call to super func
         super.draw(dirtyRect)
+        
+        guard let appCont = self.theController
+        else
+        {
+            return
+        }
 
         // Drawing code here.
         // Draw the axes. The Y-axis is always located at the left of the window so we'll start with that.
@@ -56,7 +68,7 @@ class PCH_GraphView: NSView {
         path.line(to: NSMakePoint(inset * 1.5, self.frame.size.height - inset))
         path.stroke()
         
-        let xAxisHeight = 0.0 - CGFloat((theController?.getExtremeVoltages().minV)!)
+        let xAxisHeight = 0.0 - CGFloat((appCont.getCoilExtremeVoltages().minV))
         path.removeAllPoints()
         path.move(to: NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
         path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))

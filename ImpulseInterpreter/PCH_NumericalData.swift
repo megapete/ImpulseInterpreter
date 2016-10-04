@@ -16,6 +16,18 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     /// The time of each voltage measurement
     var time:[Double]
     
+    /// An array of strings that holds the nodes in the simulation
+    var nodeID:[String]
+    
+    /// A dictionary of arrays where the key is the nodeID and the arrays are their voltages to ground at each timestep
+    var nodalVoltages:[String:[Double]]
+    
+    /// An array of strings that holds the "device names" (usually disk names) in the simulation
+    var deviceID:[String]
+    
+    /// A dictionary of arrays where the key is the deviceID and the arrays are the currents through them at each timestep
+    var deviceCurrents:[String:[Double]]
+    
     /// An array of strings that holds the names of the disks in the file
     var diskID:[String]
     

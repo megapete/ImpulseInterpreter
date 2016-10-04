@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15E27e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11201" systemVersion="16A319" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11201"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -14,6 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="ImpulseInterpreter" customModuleProvider="target">
             <connections>
+                <outlet property="coilMenu" destination="GEO-Iw-cKr" id="Ek9-og-MRy"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -133,11 +134,7 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Edit" id="W48-6f-4Dl">
                         <items>
-                            <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
-                                <connections>
-                                    <action selector="undo:" target="-1" id="M6e-cu-g7V"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg"/>
                             <menuItem title="Redo" keyEquivalent="Z" id="6dh-zS-Vam">
                                 <connections>
                                     <action selector="redo:" target="-1" id="oIA-Rs-6OD"/>
@@ -348,33 +345,37 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Graph" id="jxT-CU-nIS" userLabel="Graph">
+                <menuItem title="Coil" id="jxT-CU-nIS">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Graph" id="GEO-Iw-cKr">
+                    <menu key="submenu" title="Coil" id="GEO-Iw-cKr"/>
+                </menuItem>
+                <menuItem title="Graph" id="tND-Su-86g" userLabel="Graph">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Graph" id="3Sy-LZ-605">
                         <items>
-                            <menuItem title="Shoot" id="BTg-d7-CpS" userLabel="Shoot">
+                            <menuItem title="Shoot" id="dns-RH-qoV" userLabel="Shoot">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="handleShoot:" target="Voe-Tx-rLC" id="4X8-aa-Z6i"/>
+                                    <action selector="handleShoot:" target="Voe-Tx-rLC" id="fhH-ag-tmn"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="zVC-sW-mNk"/>
-                            <menuItem title="Save Max Voltages..." id="aAt-FT-HsL" userLabel="Shoot">
+                            <menuItem isSeparatorItem="YES" id="PRS-0v-8Uu"/>
+                            <menuItem title="Save Max Voltages..." id="AtM-lt-Ktu" userLabel="Shoot">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="handleSaveMaxVoltages:" target="Voe-Tx-rLC" id="zFe-iP-E8y"/>
+                                    <action selector="handleSaveMaxVoltages:" target="Voe-Tx-rLC" id="3Yy-Dv-8ry"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Save Max Interdisk Voltages..." id="4bh-Pt-fYe" userLabel="Shoot">
+                            <menuItem title="Save Max Interdisk Voltages..." id="E1F-Sn-Zm1" userLabel="Shoot">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="handleSaveMaxInterdiskV:" target="Voe-Tx-rLC" id="eP0-ZI-D79"/>
+                                    <action selector="handleSaveMaxInterdiskV:" target="Voe-Tx-rLC" id="nld-CC-PUI"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Save Initial Distribution..." id="c3D-BE-TOJ" userLabel="Shoot">
+                            <menuItem title="Save Initial Distribution..." id="VTB-04-Cdi" userLabel="Shoot">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="handleSaveInitialDistribution:" target="Voe-Tx-rLC" id="ChI-CU-gbK"/>
+                                    <action selector="handleSaveInitialDistribution:" target="Voe-Tx-rLC" id="1ZS-ER-iRs"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -449,6 +450,7 @@
                 <subviews>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFj-bg-0jg" customClass="PCH_GraphView" customModule="ImpulseInterpreter" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1189" height="798"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>
                 </subviews>
             </view>

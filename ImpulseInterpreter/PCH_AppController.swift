@@ -42,6 +42,10 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var shotTimer = Timer()
     var shotTimeStep = 0
     
+    var coilMenuContents:NSMenu?
+    var currentCoilChoice:NSMenuItem?
+    
+    
     func advanceShotTimeStep()
     {
         if (shotTimeStep > Int(numericalData!.numTimeSteps))
@@ -62,7 +66,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     func handleSaveMaxVoltages()
     {
         guard numericalData != nil else {
-            DLog("numericalData us undefined!")
+            DLog("numericalData is undefined!")
             return
         }
         
@@ -175,7 +179,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return
         }
         
-        var maxV = -1000.0
+        var maxV = -DBL_MAX
         var initTime = 0
         for j in 0 ..< Int((self.numericalData!.numTimeSteps))
         {
@@ -261,7 +265,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     }
     
     /// Function to get the maximum and minimum voltages in the current file
-    func getExtremes() -> (maxV:Double, minV:Double)
+    func getExtremeVoltages() -> (maxV:Double, minV:Double)
     {
         var maxResult:Double = 0.0
         var minResult:Double = 0.0
@@ -275,6 +279,21 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         return (maxResult, minResult)
     }
     
+    /// Function to get the maximum and minimum currents in the current file
+    func getExtremeCurrents() -> (maxI:Double, minI:Double)
+    {
+        var maxResult:Double = 0.0
+        var minResult:Double = 0.0
+        
+        if let numData = numericalData
+        {
+            maxResult = numData.maxCurrent
+            minResult = numData.minCurrent
+        }
+        
+        return (maxResult, minResult)
+    }
+    
     /// Function to extract the numerical data from the file
     func getDataFromFile()
     {
@@ -283,6 +302,24 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             numericalData = PCH_NumericalData(dataString: currentFileString! as String)
         }
         
+        // set up the contents of the Coils menu
+        let coilNames = numericalData!.getCoilNames()
+        
+        var gotOne = false
+        for nextName in coilNames
+        {
+            let nextCoilItem = NSMenuItem(title: nextName.uppercased(), action: #selector(AppDelegate.handleCoilChange(_:)), keyEquivalent: "")
+            if (!gotOne)
+            {
+                currentCoilChoice = nextCoilItem
+                nextCoilItem.state = NSOnState
+                gotOne = true
+            }
+
+            coilMenuContents!.addItem(nextCoilItem)
+            
+        }
+ 
     }
     
     /// Function to open a file using the standard open dialog
@@ -294,7 +331,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         getFilePanel.canChooseDirectories = false
         getFilePanel.canChooseFiles = true
         getFilePanel.allowsMultipleSelection = false
-        getFilePanel.allowedFileTypes = ["txt"]
+        getFilePanel.allowedFileTypes = ["txt", "raw"]
         
         if (getFilePanel.runModal() == NSFileHandlingPanelOKButton)
         {

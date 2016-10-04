@@ -33,7 +33,7 @@ class PCH_GraphView: NSView {
 
         currentScale.x = Double(xDisks / (self.frame.size.width - 3.0 * inset))
         
-        let yOverall = 1.05 * CGFloat((theController?.getExtremes().maxV)! - (theController?.getExtremes().minV)!)
+        let yOverall = 1.05 * CGFloat((theController?.getExtremeVoltages().maxV)! - (theController?.getExtremeVoltages().minV)!)
         
         currentScale.y = Double(yOverall / (self.frame.size.height - 3.0 * inset))
     }
@@ -56,7 +56,7 @@ class PCH_GraphView: NSView {
         path.line(to: NSMakePoint(inset * 1.5, self.frame.size.height - inset))
         path.stroke()
         
-        let xAxisHeight = 0.0 - CGFloat((theController?.getExtremes().minV)!)
+        let xAxisHeight = 0.0 - CGFloat((theController?.getExtremeVoltages().minV)!)
         path.removeAllPoints()
         path.move(to: NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
         path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))

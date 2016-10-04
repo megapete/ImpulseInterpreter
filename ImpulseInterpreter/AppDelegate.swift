@@ -16,22 +16,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
     
+    @IBOutlet weak var coilMenu: NSMenu!
+    
     /// Menu handlers (these just call the AppController functions of the same name
     @IBAction func handleOpenFile(_ sender: AnyObject) {
         
         appController.handleOpenFile()
         
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async(execute: {
+        // appController.getDataFromFile()
+        
+         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async(execute: {
                 self.appController.getDataFromFile()
-            });
+        });
         
         DLog("We have reached here")
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         appController.graphView = (self.window.contentView?.subviews[0] as! PCH_GraphView)
         appController.graphView?.theController = appController
+        
+        appController.coilMenuContents = coilMenu
+    }
+    
+    func handleCoilChange(_ sender: AnyObject)
+    {
+        DLog("Change coil in AppDelegate")
+        
+        appController.currentCoilChoice?.state = NSOffState
+        appController.currentCoilChoice = sender as? NSMenuItem
+        appController.currentCoilChoice?.state = NSOnState
     }
     
     @IBAction func handleShoot(_ sender: AnyObject)

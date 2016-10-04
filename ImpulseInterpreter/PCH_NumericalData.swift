@@ -6,6 +6,8 @@
 //  Copyright © 2015 Huberis Technologies. All rights reserved.
 //
 
+// NOTE: This class assumes that the ".raw" file in question has been created by LTSpice using the "Waveforms" tab with compression set to "None(ASCII files)".
+
 import Cocoa
 
 class PCH_NumericalData /* NSObject , NSCoding */ {
@@ -40,6 +42,12 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     /// The minimum voltage in the file (used to scale the output graph)
     var minVoltage:Double = 0.0
     
+    /// The maximum current in the file (used for scaling)
+    var maxCurrent:Double = 0.0
+    
+    /// The minimum current in the file (used for scaling)
+    var minCurrent:Double = 0.0
+    
     /**
         The designated initializer for the class.
     
@@ -47,6 +55,12 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     */
     init?(dataString:String)
     {
+        nodeID = Array()
+        nodalVoltages = Dictionary()
+        
+        deviceID = Array()
+        deviceCurrents = Dictionary()
+        
         diskID = Array()
         time = Array()
         voltage = Array(Array())
@@ -54,8 +68,19 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         // The first thing we'll do is split the string into components where each line is a component
         let linesArray = dataString.components(separatedBy: CharacterSet.newlines)
         
-        // We get at the line (5) that holds the number of time steps
-        let numStepsLine = linesArray[5].components(separatedBy: CharacterSet.whitespaces)
+        // Now we'll set up a couple of variables that access the file
+        var lineCount = 0
+        var nextLine = linesArray[lineCount]
+        
+        // The first thing we look for is the "No. Points:" field
+        while (!nextLine.contains("No. Points:"))
+        {
+            lineCount += 1
+            nextLine = linesArray[lineCount]
+        }
+
+        // We get at the line that holds the number of time steps
+        let numStepsLine = nextLine.components(separatedBy: CharacterSet.whitespaces).filter{$0 != ""}
         
         guard let points = UInt(numStepsLine[2])
         else
@@ -68,74 +93,140 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         DLog("Number of points: \(points)")
         numTimeSteps = points
         
-        // The disk voltage names start at line 8 and go until the line with the string "Value:" in it.
-        var lineCount = 8
-        var nextLine = linesArray[lineCount]
+        // The voltage and current variable names start after the line holding "Variables:"  and go until the line with the string "Values:" in it
         
-        while (!nextLine.contains("Values:"))
+        while (!nextLine.contains("Variables:"))
         {
-            nextLine = nextLine.trimmingCharacters(in: CharacterSet.whitespaces)
-            let lineComponents = nextLine.components(separatedBy: CharacterSet.whitespaces)
-            diskID.append(lineComponents[1].uppercased())
             lineCount += 1
             nextLine = linesArray[lineCount]
         }
         
+        // We need an array to hold the variable names in the same order as the file
+        var varNames:[String] = Array()
+        
+        while (!nextLine.contains("Values:"))
+        {
+            if (nextLine.contains("voltage"))
+            {
+                let voltageLine = nextLine.components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
+                
+                // The variable name is the second component in the string
+                varNames.append(voltageLine[1])
+                
+                // save the node's actual name
+                let nodeName = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
+                nodeID.append(nodeName)
+                
+            }
+            else if (nextLine.contains("device_current"))
+            {
+                let currentLine = nextLine.components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
+                
+                // The variable name is the second component in the string
+                varNames.append(currentLine[1])
+                
+                // save the node's actual name
+                let deviceName = PCH_StrMid(currentLine[1], start: 2, end: PCH_StrLength(currentLine[1])-2)
+                deviceID.append(deviceName)
+            }
+            // else ignore the line
+            
+            lineCount += 1
+            nextLine = linesArray[lineCount]
+        }
+        
+        // we're going to want the voltage and current ID arrays sorted, so:
+        nodeID.sort()
+        deviceID.sort()
+        
+        
         // bump the line counter past the "Values:" line
         lineCount += 1
         nextLine = linesArray[lineCount]
-        let diskCount = diskID.count
         
-        var maxVolts = -DBL_MAX
-        var minVolts = DBL_MAX
+        // reset the max and min values for voltages and currents
+        maxCurrent = -DBL_MAX
+        maxVoltage = -DBL_MAX
+        minCurrent = DBL_MAX
+        minVoltage = DBL_MAX
         
-        for i:UInt in 0..<points
+        // We now get the data for each timestep
+        for i in 0..<points
         {
-            if (i % 1000 == 0)
+            if (i % 100 == 0)
             {
-                DLog("Processing: \(i)")
+                DLog("Processing point: \(i)")
             }
             
-            // the first line is special - it holds the point index (which we already have as the value i) and the time of the point.
-            nextLine = nextLine.trimmingCharacters(in: CharacterSet.whitespaces)
-            let lineComponents = nextLine.components(separatedBy: CharacterSet.whitespaces)
-            time.append(Double(lineComponents[1])!)
+            // first line is the timestep index and the time
+            let timeStepLine = nextLine.components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
+            time.append(Double(timeStepLine[1])!)
+            
             lineCount += 1
             nextLine = linesArray[lineCount]
             
-            var innerArray = [Double]()
-            for _ in 0..<diskCount
+            for nextVar in varNames
             {
-                nextLine = nextLine.trimmingCharacters(in: CharacterSet.whitespaces)
+                let varKey = PCH_StrMid(nextVar, start: 2, end: PCH_StrLength(nextVar)-2)
                 
-                let nextVoltage = Double(nextLine)!
                 
-                if (nextVoltage > maxVolts)
+                guard let value = Double(nextLine.trimmingCharacters(in: CharacterSet.whitespaces))
+                else
                 {
-                    maxVolts = nextVoltage
+                    DLog("Illegal value in file")
+                    return nil
                 }
                 
-                if (nextVoltage < minVolts)
+                if (PCH_StrLeft(nextVar, length: 1) == "V")
                 {
-                    minVolts = nextVoltage
+                    if value > maxVoltage
+                    {
+                        maxVoltage = value
+                    }
+                    if value < minVoltage
+                    {
+                        minVoltage = value
+                    }
+                    
+                    if var vArray = nodalVoltages[varKey]
+                    {
+                        vArray.append(value)
+                        nodalVoltages[varKey] = vArray
+                    }
+                    else
+                    {
+                        let vArray = [value]
+                        nodalVoltages[varKey] = vArray
+                    }
                 }
-                
-                innerArray.append(nextVoltage)
+                else if (PCH_StrLeft(nextVar, length: 1) == "I")
+                {
+                    if value > maxCurrent
+                    {
+                        maxCurrent = value
+                    }
+                    if value < minCurrent
+                    {
+                        minCurrent = value
+                    }
+                    
+                    if var iArray = deviceCurrents[varKey]
+                    {
+                        iArray.append(value)
+                        deviceCurrents[varKey] = iArray
+                    }
+                    else
+                    {
+                        let iArray = [value]
+                        deviceCurrents[varKey] = iArray
+                    }
+                }
                 
                 lineCount += 1
                 nextLine = linesArray[lineCount]
             }
             
-            voltage.append(innerArray)
-            
-            // bump the index past the blank line
-            lineCount += 1
-            nextLine = linesArray[lineCount]
         }
-        
-        maxVoltage = maxVolts
-        minVoltage = minVolts
-        
     }
     
     /**
@@ -192,10 +283,11 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     {
         var result = [String]()
         
-        for nextID in diskID
+        let inputIDs = nodeID.filter{$0.contains("i")}
+            
+        for nextID in inputIDs
         {
-            // Swift Ranges (and therefore substring extraction) is badly documented. I got this from Stack Overflow
-            let testString = nextID[nextID.characters.index(nextID.startIndex, offsetBy: 2)...nextID.characters.index(nextID.startIndex, offsetBy: 3)].uppercased()
+            let testString = PCH_StrLeft(nextID, length: 2)
             
             if !result.contains(testString)
             {

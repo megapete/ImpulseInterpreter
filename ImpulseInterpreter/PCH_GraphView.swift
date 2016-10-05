@@ -39,12 +39,14 @@ class PCH_GraphView: NSView {
 
         currentScale.x = Double(xDisks / (self.frame.size.width - 3.0 * inset))
         
-        let yOverall = 1.05 * CGFloat((appCont.getCoilExtremeVoltages().maxV) - (appCont.getCoilExtremeVoltages().minV))
+        let extremes = appCont.getCoilExtremeVoltages()
+        let yOverall = 1.05 * CGFloat((extremes.maxV) - (extremes.minV))
         
         currentScale.y = Double(yOverall / (self.frame.size.height - 3.0 * inset))
     }
     
-    override func viewDidMoveToSuperview() {
+    override func viewDidMoveToSuperview()
+    {
         DLog("We came here")
     }
     
@@ -70,11 +72,11 @@ class PCH_GraphView: NSView {
         
         let xAxisHeight = 0.0 - CGFloat((appCont.getCoilExtremeVoltages().minV))
         path.removeAllPoints()
-        path.move(to: NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
-        path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x)))
+        path.move(to: NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y)))
+        path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y)))
         path.stroke()
         
-        let origin:NSPoint = NSMakePoint(inset * 1.5, inset * 1.5 + xAxisHeight / CGFloat(currentScale.x))
+        let origin:NSPoint = NSMakePoint(inset * 1.5, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y))
         
         guard let vPoints = voltages
         else
@@ -93,7 +95,6 @@ class PCH_GraphView: NSView {
         }
         
         path.stroke()
-        
     }
     
 }

@@ -48,16 +48,56 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     func advanceShotTimeStep()
     {
-        if (shotTimeStep > Int(numericalData!.numTimeSteps))
+        guard let numData = numericalData
+        else
+        {
+            return
+        }
+        
+        if (shotTimeStep >= Int(numData.numTimeSteps))
         {
             DLog("Done with shot")
             shotTimer.invalidate()
             return
         }
         
-        graphView!.voltages = numericalData!.voltage[shotTimeStep]
-        graphView!.needsDisplay = true
-        shotTimeStep += 100
+        guard let grView = graphView
+        else
+        {
+            return
+        }
+        
+        grView.voltages = getCoilNodeVoltagesAt(timeStepIndex: shotTimeStep)
+        grView.needsDisplay = true
+        shotTimeStep += 1
+    }
+    
+    func getCoilNodeVoltagesAt(timeStepIndex:Int) -> [Double]
+    {
+        let targetNodes = self.currentCoilID() + "i"
+        
+        guard let numData = numericalData
+            else
+        {
+            return Array()
+        }
+        
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}.sorted()
+        
+        var result:[Double] = Array()
+        
+        for nextNode in nodes
+        {
+            guard let nextVoltageArray = numData.nodalVoltages[nextNode]
+            else
+            {
+                continue
+            }
+            
+            result.append(nextVoltageArray[timeStepIndex])
+        }
+        
+        return result
     }
     
     /** Save the maximum voltages for each "disk" in the data file (as a CSV file). The format of each line of the file is:
@@ -65,7 +105,9 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     */
     func handleSaveMaxVoltages()
     {
-        guard numericalData != nil else {
+        guard numericalData != nil
+        else
+        {
             DLog("numericalData is undefined!")
             return
         }
@@ -245,7 +287,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         gView.ZoomAll()
         
         shotTimeStep = 0
-        shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
+        shotTimer = Timer.scheduledTimer(timeInterval: 0.005, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
         
     }
     
@@ -303,17 +345,23 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         let targetNodes = self.currentCoilID() + "i"
         
-        let nodes = numericalData?.nodeID.filter{$0.contains(targetNodes)}
-        
-        for nextNode in nodes!
+        guard let numData = numericalData
+        else
         {
-            let nextMinVal = numericalData?.nodalVoltages[nextNode]!.min()
+            return (0.0, 0.0)
+        }
+        
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        
+        for nextNode in nodes
+        {
+            let nextMinVal = numData.nodalVoltages[nextNode]!.min()
             if (nextMinVal < minResult)
             {
                 minResult = nextMinVal!
             }
             
-            let nextMaxVal = numericalData?.nodalVoltages[nextNode]!.max()
+            let nextMaxVal = numData.nodalVoltages[nextNode]!.max()
             if (nextMaxVal > maxResult)
             {
                 maxResult = nextMaxVal!
@@ -374,9 +422,14 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
 
             coilMenuContents!.addItem(nextCoilItem)
-            
         }
  
+        guard let grView = graphView
+        else
+        {
+            return
+        }
+        grView.needsDisplay = true
     }
     
     /// Function to open a file using the standard open dialog

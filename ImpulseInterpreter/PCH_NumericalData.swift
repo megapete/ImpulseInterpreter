@@ -90,7 +90,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             return nil
         }
         
-        DLog("Number of points: \(points)")
+        DLog("Number of timesteps: \(points)")
         numTimeSteps = points
         
         // The voltage and current variable names start after the line holding "Variables:"  and go until the line with the string "Values:" in it
@@ -104,6 +104,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         // We need an array to hold the variable names in the same order as the file
         var varNames:[String] = Array()
         
+        DLog("Reading variable names...")
         while (!nextLine.contains("Values:"))
         {
             if (nextLine.contains("voltage"))
@@ -134,6 +135,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             lineCount += 1
             nextLine = linesArray[lineCount]
         }
+        DLog("Done")
         
         // we're going to want the voltage and current ID arrays sorted, so:
         nodeID.sort()
@@ -151,11 +153,12 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         minVoltage = DBL_MAX
         
         // We now get the data for each timestep
+        DLog("Processing values at each timestep")
         for i in 0..<points
         {
             if (i % 100 == 0)
             {
-                DLog("Processing point: \(i)")
+                DLog("Processing timestep: \(i)")
             }
             
             // first line is the timestep index and the time

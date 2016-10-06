@@ -105,32 +105,24 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     */
     func handleSaveMaxVoltages()
     {
-        guard numericalData != nil
-        else
-        {
-            DLog("numericalData is undefined!")
+        guard let numData = numericalData else {
+            DLog("numericalData us undefined!")
             return
         }
         
+        let targetNodes = self.currentCoilID() + "i"
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        
         var outputFileString = String()
         
-        for i in 0..<self.numericalData!.diskID.count
+        for nextNode in nodes
         // for var i=0; i<self.numericalData?.diskID.count; i += 1
         {
-            var maxTStep = -1.0
-            var maxV = 0.0
-            for j in 0 ..< Int((self.numericalData!.numTimeSteps))
-            {
-                let nextV = self.numericalData!.getVoltage(diskIndex: i, timestep: j)
-                
-                if (nextV > maxV)
-                {
-                    maxTStep = (self.numericalData!.time[j])
-                    maxV = nextV
-                }
-            }
+            let vArray = numData.nodalVoltages[nextNode]!
+            let maxV = vArray.max()
+            let maxIndex = vArray.index(of: maxV!)
             
-            let nextline = String(format: "%@,%0.7E,%0.7E\n", (self.numericalData!.diskID[i]), maxTStep, maxV)
+            let nextline = String(format: "%@,%0.7E,%0.7E\n", nextNode, numData.time[maxIndex!], maxV!)
             outputFileString += nextline
         }
         
@@ -161,30 +153,37 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     func handleMaxInterdiskV()
     {
-        guard numericalData != nil else {
+        guard let numData = numericalData else {
             DLog("numericalData us undefined!")
             return
         }
         
+        let targetNodes = self.currentCoilID() + "i"
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        
         var outputFileString = String()
         
-        for i in 0..<(self.numericalData!.diskID.count) - 1
+        for i in 0..<(nodes.count - 1)
         {
             var maxTStep = -1.0
             var maxVdiff = 0.0
-            for j in 0 ..< Int((self.numericalData!.numTimeSteps))
+            
+            for j in 0 ..< Int((numData.numTimeSteps))
             {
-                let nextV1 = self.numericalData!.getVoltage(diskIndex: i, timestep: j)
-                let nextV2 = self.numericalData!.getVoltage(diskIndex: i+1, timestep: j)
+                let nextV1Array = numData.nodalVoltages[nodes[i]]
+                let nextV2Array = numData.nodalVoltages[nodes[i+1]]
+                
+                let nextV1 = nextV1Array![j]
+                let nextV2 = nextV2Array![j]
                 
                 if (fabs(nextV1 - nextV2) > maxVdiff)
                 {
-                    maxTStep = (self.numericalData!.time[j])
+                    maxTStep = (numData.time[j])
                     maxVdiff = fabs(nextV1 - nextV2)
                 }
             }
             
-            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", (self.numericalData!.diskID[i]), (self.numericalData!.diskID[i+1]), maxTStep, maxVdiff)
+            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", nodes[i], nodes[i+1], maxTStep, maxVdiff)
             outputFileString += nextline
         }
         
@@ -216,16 +215,27 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     {
         // This function traces the voltage of the first entry in the disk array until it reaches a maximum, and outputs the voltages of that node and all the rest at that timestep
         
-        guard numericalData != nil else {
+        guard let numData = numericalData else {
             DLog("numericalData us undefined!")
+            return
+        }
+        
+        let targetNodes = self.currentCoilID() + "i"
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        
+        // TODO: Right now we hardcode in the last element of the array, but this should be selectable
+        guard let theNodeVoltageArray = numData.nodalVoltages[nodes.last!]
+        else
+        {
+            DLog("No voltages array for this coil")
             return
         }
         
         var maxV = -DBL_MAX
         var initTime = 0
-        for j in 0 ..< Int((self.numericalData!.numTimeSteps))
+        for j in 0 ..< Int((numData.numTimeSteps))
         {
-            let nextV = self.numericalData!.getVoltage(diskIndex: 0, timestep: j)
+            let nextV = theNodeVoltageArray[j]
             
             if (nextV < maxV)
             {
@@ -238,15 +248,14 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
         }
         
-        var outputFileString = String(format: "Time: %0.7E\n", (self.numericalData!.time[initTime]))
+        var outputFileString = String(format: "Time: %0.7E\n", (numData.time[initTime]))
         
-        for i in 0..<self.numericalData!.diskID.count
+        for nextNode in nodes
         {
-            let volts = self.numericalData!.getVoltage(diskIndex: i, timestep: initTime)
-            let name = self.numericalData!.diskID[i]
+            let vArray = numData.nodalVoltages[nextNode]
+            let volts = vArray?[initTime]
             
-            outputFileString += String(format: "%@,%0.7E\n", name, volts)
-            
+            outputFileString += String(format: "%@,%0.7E\n", nextNode, volts!)
         }
         
         let savePanel = NSSavePanel()

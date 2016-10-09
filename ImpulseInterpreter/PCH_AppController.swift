@@ -296,7 +296,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         gView.ZoomAll()
         
         shotTimeStep = 0
-        shotTimer = Timer.scheduledTimer(timeInterval: 0.005, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
+        shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
         
     }
     
@@ -314,21 +314,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         // graphView!.ZoomAll()
         
     }
-    
-    /// Function to get the maximum and minimum voltages in the current file
-    func getExtremeVoltages() -> (maxV:Double, minV:Double)
-    {
-        var maxResult:Double = 0.0
-        var minResult:Double = 0.0
-        
-        if let numData = numericalData
-        {
-            maxResult = numData.maxVoltage
-            minResult = numData.minVoltage
-        }
-        
-        return (maxResult, minResult)
-    }
+
     
     /// Function to get an array of the current coil node IDs
     func getCoilNodeIDs() -> [String]
@@ -381,21 +367,6 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
     }
     
-    /// Function to get the maximum and minimum currents in the current file
-    func getExtremeCurrents() -> (maxI:Double, minI:Double)
-    {
-        var maxResult:Double = 0.0
-        var minResult:Double = 0.0
-        
-        if let numData = numericalData
-        {
-            maxResult = numData.maxCurrent
-            minResult = numData.minCurrent
-        }
-        
-        return (maxResult, minResult)
-    }
-    
     /// Function to get the current coil
     func currentCoilID() -> String
     {
@@ -438,6 +409,9 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         {
             return
         }
+        
+        grView.ZoomAll()
+        
         grView.needsDisplay = true
     }
     

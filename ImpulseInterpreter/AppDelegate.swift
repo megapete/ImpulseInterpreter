@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // appController.getDataFromFile()
         
-         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async(execute: {
+         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
                 self.appController.getDataFromFile()
         });
         
@@ -48,6 +48,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.currentCoilChoice?.state = NSOffState
         appController.currentCoilChoice = sender as? NSMenuItem
         appController.currentCoilChoice?.state = NSOnState
+        
+        appController.graphView?.needsDisplay = true
     }
     
     @IBAction func handleShoot(_ sender: AnyObject)

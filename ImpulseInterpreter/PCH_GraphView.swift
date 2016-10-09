@@ -11,7 +11,9 @@ import Cocoa
 class PCH_GraphView: NSView {
     
     /// A constant that moves the graph a bit inside the window
-    let inset = CGFloat(10.0)
+    let inset = CGFloat(50.0)
+    
+    var numYlabels = 10
     
     /// The app controller object
     weak var theController:PCH_AppController?
@@ -40,7 +42,14 @@ class PCH_GraphView: NSView {
         currentScale.x = Double(xDisks / (self.frame.size.width - 3.0 * inset))
         
         let extremes = appCont.getCoilExtremeVoltages()
-        let yOverall = 1.05 * CGFloat((extremes.maxV) - (extremes.minV))
+        
+        // round up the max extreme to the next 10kV (same for min, but round down)
+        let yMax = round(extremes.maxV / 10000.0 + 0.5) * 10000.0
+        let yMin = round(extremes.minV / 10000.0 - 0.5) * 10000.0
+        
+        // Set the number of labels so we get one every 20kV
+        self.numYlabels = Int((yMax - yMin) / 20000) + 1
+        let yOverall = /* 1.05 * */ CGFloat(yMax - yMin)
         
         currentScale.y = Double(yOverall / (self.frame.size.height - 3.0 * inset))
     }
@@ -70,7 +79,12 @@ class PCH_GraphView: NSView {
         path.line(to: NSMakePoint(inset * 1.5, self.frame.size.height - inset))
         path.stroke()
         
-        let xAxisHeight = 0.0 - CGFloat((appCont.getCoilExtremeVoltages().minV))
+        let extremes = appCont.getCoilExtremeVoltages()
+        var xAxisHeight = CGFloat(0.0)
+        if (extremes.minV < 0.0)
+        {
+            xAxisHeight -= CGFloat(extremes.minV)
+        }
         path.removeAllPoints()
         path.move(to: NSMakePoint(inset / 2.0, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y)))
         path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y)))
@@ -78,8 +92,44 @@ class PCH_GraphView: NSView {
         
         let origin:NSPoint = NSMakePoint(inset * 1.5, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y))
         
+        if (appCont.numericalData == nil)
+        {
+            return
+        }
+        
+        var yPos = self.frame.size.height - inset * 1.5 - 7.5
+        let yOffset = (self.frame.size.height - 3.0 * inset) / CGFloat(numYlabels - 1)
+        let kvMax = round(extremes.maxV / 10000.0 + 0.5) * 10000.0
+        let kvMin = round(extremes.minV / 10000.0 - 0.5) * 10000.0
+        let kvPerTick = (kvMax - kvMin) / Double(numYlabels - 1)
+        var kvCurrent = kvMax
+        
+        for i in 0..<numYlabels
+        {
+            if #available(OSX 10.12, *)
+            {
+                let theKV = "\(Int(kvCurrent / 1000.0))kV"
+                let nextField = NSTextField(labelWithString: theKV)
+                nextField.isEditable = false
+                nextField.isBezeled = false
+                nextField.isBordered = false
+                nextField.alignment = NSRightTextAlignment
+                
+                nextField.frame = NSMakeRect(10.0, yPos, origin.x - 10.0 - 10, 15.0)
+                
+                self.addSubview(nextField)
+                
+                yPos -= yOffset
+                kvCurrent -= kvPerTick
+                
+            } else {
+                // Fallback on earlier versions
+            }
+            
+        }
+        
         guard let vPoints = voltages
-        else
+            else
         {
             return
         }

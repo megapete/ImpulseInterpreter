@@ -24,7 +24,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     /// A dictionary of arrays where the key is the nodeID and the arrays are their voltages to ground at each timestep
     var nodalVoltages:[String:[Double]]
     
-    /// An array of strings that holds the "device names" (usually disk names) in the simulation
+    /// An array of strings that holds the "device names" (capacitors, inductors, resistors) in the simulation
     var deviceID:[String]
     
     /// A dictionary of arrays where the key is the deviceID and the arrays are the currents through them at each timestep
@@ -55,7 +55,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         deviceID = Array()
         deviceCurrents = Dictionary()
         
-        time = Array()
+        
         
         // The first thing we'll do is split the string into components where each line is a component
         let linesArray = dataString.components(separatedBy: CharacterSet.newlines)
@@ -85,6 +85,8 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         DLog("Number of timesteps: \(points)")
         numTimeSteps = points
         
+        time = Array(repeating:0.0, count:Int(numTimeSteps))
+        
         // The voltage and current variable names start after the line holding "Variables:"  and go until the line with the string "Values:" in it
         
         while (!nextLine.contains("Variables:"))
@@ -110,7 +112,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 // We extract the variable key for use in the nodalVoltage dicitonary and initialize the array for that key
                 let varKey = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
                 varKeys.append(varKey)
-                nodalVoltages[varKey] = Array()
+                nodalVoltages[varKey] = Array(repeating:0.0, count:Int(numTimeSteps))
                 
                 // save the node's actual name
                 let nodeName = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
@@ -127,7 +129,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 // We extract the variable key for use in the deviceCurrents dicitonary and initialize the array for that key
                 let varKey = PCH_StrMid(currentLine[1], start: 2, end: PCH_StrLength(currentLine[1])-2)
                 varKeys.append(varKey)
-                deviceCurrents[varKey] = Array()
+                deviceCurrents[varKey] = Array(repeating:0.0, count:Int(numTimeSteps))
                 
                 // save the node's actual name
                 let deviceName = PCH_StrMid(currentLine[1], start: 2, end: PCH_StrLength(currentLine[1])-2)
@@ -166,7 +168,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             
             // first line is the timestep index and the time
             let timeStepLine = nextLine.components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
-            time.append(Double(timeStepLine[1])!)
+            time[Int(i)] = Double(timeStepLine[1])!
             
             lineCount += 1
             nextLine = linesArray[lineCount]
@@ -194,11 +196,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                         minVoltage = value
                     }
                     
-                    if var vArray = nodalVoltages[varKey]
-                    {
-                        vArray.append(value)
-                        nodalVoltages[varKey] = vArray
-                    }
+                    nodalVoltages[varKey]![Int(i)] = value
                 }
                 else if (nextVar.characters.first == "I")
                 {
@@ -211,11 +209,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                         minCurrent = value
                     }
                     
-                    if var iArray = deviceCurrents[varKey]
-                    {
-                        iArray.append(value)
-                        deviceCurrents[varKey] = iArray
-                    }
+                    deviceCurrents[varKey]![Int(i)] = value
                 }
                 
                 lineCount += 1

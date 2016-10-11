@@ -41,14 +41,14 @@ class PCH_GraphView: NSView {
             return
         }
         
-        let xDisks = 1.0 * CGFloat((appCont.getCoilNodeIDs().count))
+        let xNodes = 1.0 * CGFloat((appCont.getCoilNodeIDs().count))
         
-        if xDisks == 0.0
+        if xNodes == 0.0
         {
             return
         }
 
-        currentScale.x = Double(xDisks / (self.frame.size.width - 2.5 * inset))
+        currentScale.x = Double((xNodes - 1.0) / (self.frame.size.width - 2.5 * inset))
         
         let extremes = appCont.getCoilExtremeVoltages()
         

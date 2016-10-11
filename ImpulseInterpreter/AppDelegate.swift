@@ -72,6 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.currentCoilChoice = sender as? NSMenuItem
         appController.currentCoilChoice?.state = NSOnState
         
+        appController.graphView?.voltages = nil
         appController.graphView?.ZoomAll()
         appController.graphView?.needsDisplay = true
     }

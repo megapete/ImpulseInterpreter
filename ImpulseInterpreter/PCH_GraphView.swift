@@ -15,6 +15,9 @@ class PCH_GraphView: NSView {
     
     var numYlabels = 10
     
+    var bottomLabel:NSTextField?
+    var topLabel:NSTextField?
+    
     /// The app controller object
     weak var theController:PCH_AppController?
     
@@ -38,14 +41,14 @@ class PCH_GraphView: NSView {
             return
         }
         
-        let xDisks = 1.05 * CGFloat((appCont.getCoilNodeIDs().count))
+        let xDisks = 1.0 * CGFloat((appCont.getCoilNodeIDs().count))
         
         if xDisks == 0.0
         {
             return
         }
 
-        currentScale.x = Double(xDisks / (self.frame.size.width - 3.0 * inset))
+        currentScale.x = Double(xDisks / (self.frame.size.width - 2.5 * inset))
         
         let extremes = appCont.getCoilExtremeVoltages()
         
@@ -103,6 +106,10 @@ class PCH_GraphView: NSView {
         path.stroke()
         
         let origin:NSPoint = NSMakePoint(inset * 1.5, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y))
+        
+        bottomLabel?.frame = NSRect(x: origin.x + 2.0, y: origin.y - bottomLabel!.frame.height - 2.0, width: bottomLabel!.frame.width, height: bottomLabel!.frame.height)
+        topLabel?.frame = NSRect(x: self.frame.size.width - inset - topLabel!.frame.width / 2.0, y: origin.y - topLabel!.frame.height - 2.0, width: topLabel!.frame.width, height: topLabel!.frame.height)
+        
         
         if (appCont.numericalData == nil)
         {

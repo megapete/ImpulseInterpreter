@@ -38,6 +38,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var numericalData:PCH_NumericalData?
     
     var graphView:PCH_GraphView?
+    var elapsedTimeIndicator:NSTextField?
     
     var shotTimer = Timer()
     var shotTimeStep = 0
@@ -45,6 +46,13 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var coilMenuContents:NSMenu?
     var currentCoilChoice:NSMenuItem?
     
+    // ignore everything before this time (to try and get rid of spurious oscillations at the beginning of a simulation)
+    let simulationStartTime = 50.0E-9
+    
+    // The time that will be used for "initial distribution" values
+    let initDistributionTime = 1.2E-6
+    
+    var loadingProgress:NSProgressIndicator?
     
     func advanceShotTimeStep()
     {
@@ -60,6 +68,29 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             shotTimer.invalidate()
             return
         }
+        
+        // Ignore everything before the time in simulationStartTime
+        if numData.time[shotTimeStep] < simulationStartTime
+        {
+            shotTimeStep += 1
+            return
+        }
+        
+        var elTime = numData.time[shotTimeStep]
+        var timeUnits = "µs"
+        if (elTime < 100.0E-9)
+        {
+            timeUnits = "ns"
+            elTime *= 1.0E9
+        }
+        else
+        {
+            elTime *= 1.0E6
+        }
+        
+        let elTimeDisplay = String(format: "Time elapsed: %0.5f %@", elTime, timeUnits)
+        
+        elapsedTimeIndicator!.stringValue = elTimeDisplay
         
         guard let grView = graphView
         else
@@ -211,10 +242,9 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
     }
     
-    func handleInitialDistribution()
+    func handleInitialDistribution(saveValues:Bool)
     {
-        // This function traces the voltage of the first entry in the disk array until it reaches a maximum, and outputs the voltages of that node and all the rest at that timestep
-        
+        // This function outputs the voltage at the recorded time that is closest to initDistributionTime
         guard let numData = numericalData else {
             DLog("numericalData us undefined!")
             return
@@ -222,30 +252,48 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         let targetNodes = self.currentCoilID() + "i"
         let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+    
         
-        // TODO: Right now we hardcode in the last element of the array, but this should be selectable
-        guard let theNodeVoltageArray = numData.nodalVoltages[nodes.last!]
+        var initTime = 0
+        for i in 0..<Int(numData.numTimeSteps)
+        {
+            if (numData.time[i] >= initDistributionTime)
+            {
+                initTime = i
+                break
+            }
+        }
+        
+        var theTime = numData.time[initTime]
+        var timeUnits = "µs"
+        if (theTime < 100.0E-9)
+        {
+            timeUnits = "ns"
+            theTime *= 1.0E9
+        }
         else
         {
-            DLog("No voltages array for this coil")
+            theTime *= 1.0E6
+        }
+        
+        let elTimeDisplay = String(format: "Initial dist. time: %0.5f %@", theTime, timeUnits)
+        
+        elapsedTimeIndicator!.stringValue = elTimeDisplay
+        
+        guard let grView = graphView
+            else
+        {
             return
         }
         
-        var maxV = -DBL_MAX
-        var initTime = 0
-        for j in 0 ..< Int((numData.numTimeSteps))
+        grView.voltages = getCoilNodeVoltagesAt(timeStepIndex: initTime)
+        grView.needsDisplay = true
+        shotTimeStep += 1
+
+        guard (saveValues)
+        else
         {
-            let nextV = theNodeVoltageArray[j]
-            
-            if (nextV < maxV)
-            {
-                initTime = j
-                break
-            }
-            else
-            {
-                maxV = nextV
-            }
+            return
         }
         
         var outputFileString = String(format: "Time: %0.7E\n", (numData.time[initTime]))

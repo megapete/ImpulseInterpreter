@@ -14,7 +14,11 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="ImpulseInterpreter" customModuleProvider="target">
             <connections>
+                <outlet property="bottomLabel" destination="167-Gt-EcV" id="0hK-Ux-rRx"/>
                 <outlet property="coilMenu" destination="GEO-Iw-cKr" id="Ek9-og-MRy"/>
+                <outlet property="loadFileProgInd" destination="Uxk-wp-uYZ" id="mrG-uz-rl5"/>
+                <outlet property="timeElapsedField" destination="fxL-0N-gpt" id="RXP-J9-Qke"/>
+                <outlet property="topLabel" destination="wmf-k6-3Lr" id="4ZR-RK-xJv"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -360,13 +364,26 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="PRS-0v-8Uu"/>
+                            <menuItem title="Show Initial Distribution" id="g4q-0G-5eN" userLabel="Shoot">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="handleShowInitDist:" target="Voe-Tx-rLC" id="NaM-aD-TBW"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show Max Voltages between sections" id="lel-WS-lsX" userLabel="Shoot">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="handleShowMaxInterDiskV:" target="Voe-Tx-rLC" id="ieb-Rc-YI8"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="DAl-oT-KdS"/>
                             <menuItem title="Save Max Voltages..." id="AtM-lt-Ktu" userLabel="Shoot">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="handleSaveMaxVoltages:" target="Voe-Tx-rLC" id="3Yy-Dv-8ry"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Save Max Interdisk Voltages..." id="E1F-Sn-Zm1" userLabel="Shoot">
+                            <menuItem title="Save Max Voltages between sections..." id="E1F-Sn-Zm1" userLabel="Shoot">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="handleSaveMaxInterdiskV:" target="Voe-Tx-rLC" id="nld-CC-PUI"/>
@@ -451,6 +468,39 @@
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFj-bg-0jg" customClass="PCH_GraphView" customModule="ImpulseInterpreter" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="1189" height="798"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fxL-0N-gpt">
+                                <rect key="frame" x="18" y="761" width="189" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Time elapsed: 0 s" id="zKG-w5-0gA">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="167-Gt-EcV">
+                                <rect key="frame" x="158" y="131" width="49" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Bottom" id="taw-jN-4e9">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wmf-k6-3Lr">
+                                <rect key="frame" x="315" y="131" width="37" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Top" id="uzI-uZ-E45">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Uxk-wp-uYZ">
+                                <rect key="frame" x="586" y="391" width="16" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                        </subviews>
                     </customView>
                 </subviews>
             </view>

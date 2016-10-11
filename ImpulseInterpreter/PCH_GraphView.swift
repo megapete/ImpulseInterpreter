@@ -31,6 +31,10 @@ class PCH_GraphView: NSView {
     var yLabelArray:[NSTextField]? = nil
     
     var voltages:[Double]?
+    var maxVoltages:[Double]?
+    var minVoltages:[Double]?
+    
+    var isInitDist = false
     
     /// Function to calculate the scale factors for the graph
     func ZoomAll()
@@ -165,19 +169,77 @@ class PCH_GraphView: NSView {
         guard let vPoints = voltages
             else
         {
+            maxVoltages = nil
+            minVoltages = nil
             return
         }
         
+        if (maxVoltages == nil)
+        {
+            maxVoltages = Array(repeating: 0.0, count: vPoints.count)
+        }
+        
+        if (minVoltages == nil)
+        {
+            minVoltages = Array(repeating: 0.0, count: vPoints.count)
+        }
+        
         let numDisks = vPoints.count
-        NSColor.red.set()
+        
         path.removeAllPoints()
         path.move(to: NSMakePoint(origin.x, origin.y + CGFloat(vPoints[0] / currentScale.y)))
+        
+        if (vPoints[0] > maxVoltages![0])
+        {
+            maxVoltages![0] = vPoints[0]
+        }
+        
+        if (vPoints[0] < minVoltages![0])
+        {
+            minVoltages![0] = vPoints[0]
+        }
         
         for i in 1..<numDisks
         {
             path.line(to: NSMakePoint(origin.x + CGFloat(i) / CGFloat(currentScale.x), origin.y + CGFloat(vPoints[i] / currentScale.y)))
+            
+            if (vPoints[i] > maxVoltages![i])
+            {
+                maxVoltages![i] = vPoints[i]
+            }
+            
+            if (vPoints[i] < minVoltages![i])
+            {
+                minVoltages![i] = vPoints[i]
+            }
         }
         
+        if (!isInitDist)
+        {
+            let maxPath = NSBezierPath()
+            maxPath.removeAllPoints()
+            maxPath.move(to: NSMakePoint(origin.x, origin.y + CGFloat(maxVoltages![0] / currentScale.y)))
+            for i in 1..<numDisks
+            {
+                maxPath.line(to: NSMakePoint(origin.x + CGFloat(i) / CGFloat(currentScale.x), origin.y + CGFloat(maxVoltages![i] / currentScale.y)))
+            }
+            
+            let minPath = NSBezierPath()
+            minPath.removeAllPoints()
+            minPath.move(to: NSMakePoint(origin.x, origin.y + CGFloat(minVoltages![0] / currentScale.y)))
+            for i in 1..<numDisks
+            {
+                minPath.line(to: NSMakePoint(origin.x + CGFloat(i) / CGFloat(currentScale.x), origin.y + CGFloat(minVoltages![i] / currentScale.y)))
+            }
+            
+            NSColor.green.set()
+            minPath.stroke()
+            
+            NSColor.blue.set()
+            maxPath.stroke()
+        }
+        
+        NSColor.red.set()
         path.stroke()
     }
     

@@ -287,6 +287,9 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         grView.voltages = getCoilNodeVoltagesAt(timeStepIndex: initTime)
+        grView.maxVoltages = nil
+        grView.minVoltages = nil
+        grView.isInitDist = true
         grView.needsDisplay = true
         shotTimeStep += 1
 
@@ -341,6 +344,9 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return
         }
         
+        gView.isInitDist = false
+        gView.minVoltages = nil
+        gView.maxVoltages = nil
         gView.ZoomAll()
         
         shotTimeStep = 0

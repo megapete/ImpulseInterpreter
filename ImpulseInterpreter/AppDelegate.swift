@@ -22,6 +22,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var bottomLabel: NSTextField!
     @IBOutlet weak var topLabel: NSTextField!
     
+    @IBOutlet weak var continueButton: NSButton!
+    @IBAction func handleContinueShot(_ sender: AnyObject)
+    {
+        appController.continueShot()
+    }
+    
+    
+    @IBOutlet weak var stopButton: NSButton!
+    @IBAction func handleStopShoot(_ sender: AnyObject)
+    {
+        appController.stopShot()
+    }
+    
     // @IBOutlet weak var loadFileProgInd: NSProgressIndicator!
     @IBOutlet weak var loadFileProgInd: NSProgressIndicator!
     
@@ -60,6 +73,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         appController.coilMenuContents = coilMenu
         appController.elapsedTimeIndicator = timeElapsedField
+        
+        appController.stopButton = self.stopButton
+        appController.continueButton = self.continueButton
         
         appController.loadingProgress = loadFileProgInd
     }

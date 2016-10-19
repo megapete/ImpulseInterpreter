@@ -46,13 +46,43 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var coilMenuContents:NSMenu?
     var currentCoilChoice:NSMenuItem?
     
+    var stopButton:NSButton?
+    var continueButton:NSButton?
+    
+    var simulationIsRunning = false
+    
     // ignore everything before this time (to try and get rid of spurious oscillations at the beginning of a simulation)
-    let simulationStartTime = 50.0E-9
+    let simulationStartTime = 100.0E-9
     
     // The time that will be used for "initial distribution" values
     let initDistributionTime = 1.2E-6
     
     var loadingProgress:NSProgressIndicator?
+    
+    func stopShot()
+    {
+        if (simulationIsRunning)
+        {
+            shotTimer.invalidate()
+            simulationIsRunning = false
+            stopButton!.title = "Reshoot"
+            continueButton!.isHidden = false
+        }
+        else
+        {
+            // "Reshoot" was clicked, start over
+            handleShoot()
+        }
+    }
+    
+    func continueShot()
+    {
+        simulationIsRunning = true
+        stopButton!.title = "Stop"
+        continueButton!.isHidden = true
+        
+        shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
+    }
     
     func advanceShotTimeStep()
     {
@@ -66,6 +96,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         {
             DLog("Done with shot")
             shotTimer.invalidate()
+            stopButton!.isHidden = true
+            continueButton!.isHidden = true
             return
         }
         
@@ -194,7 +226,17 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         var outputFileString = String()
         
-        for i in 0..<(nodes.count - 1)
+        var firstTimeIndex = 0
+        for i in 0..<Int(numData.numTimeSteps)
+        {
+            if (numData.time[i] >= simulationStartTime)
+            {
+                firstTimeIndex = i
+                break
+            }
+        }
+        
+        for i in firstTimeIndex..<(nodes.count - 1)
         {
             var maxTStep = -1.0
             var maxVdiff = 0.0
@@ -344,10 +386,18 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return
         }
         
+        stopButton!.title = "Stop"
+        stopButton!.isHidden = false
+        continueButton?.isHidden = true
+        
+        simulationIsRunning = true
+        
         gView.isInitDist = false
         gView.minVoltages = nil
         gView.maxVoltages = nil
+        gView.voltages = nil
         gView.ZoomAll()
+        // gView.needsDisplay = true
         
         shotTimeStep = 0
         shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
@@ -400,17 +450,36 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return (0.0, 0.0)
         }
         
+        // we need to remove all the entries where time is less than simulationStartTime
+        var firstTimeIndex = 0
+        for i in 0..<Int(numData.numTimeSteps)
+        {
+            if (numData.time[i] >= simulationStartTime)
+            {
+                firstTimeIndex = i
+                break
+            }
+        }
+        
         let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
         
         for nextNode in nodes
         {
-            let nextMinVal = numData.nodalVoltages[nextNode]!.min()
+            guard var vArray = numData.nodalVoltages[nextNode]
+            else
+            {
+                continue
+            }
+            
+            vArray.removeFirst(firstTimeIndex)
+            
+            let nextMinVal = vArray.min()
             if (nextMinVal < minResult)
             {
                 minResult = nextMinVal!
             }
             
-            let nextMaxVal = numData.nodalVoltages[nextNode]!.max()
+            let nextMaxVal = vArray.max()
             if (nextMaxVal > maxResult)
             {
                 maxResult = nextMaxVal!

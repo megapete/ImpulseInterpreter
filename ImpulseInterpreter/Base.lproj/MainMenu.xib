@@ -16,7 +16,9 @@
             <connections>
                 <outlet property="bottomLabel" destination="167-Gt-EcV" id="0hK-Ux-rRx"/>
                 <outlet property="coilMenu" destination="GEO-Iw-cKr" id="Ek9-og-MRy"/>
+                <outlet property="continueButton" destination="zbT-Ln-eff" id="4f1-gI-9sN"/>
                 <outlet property="loadFileProgInd" destination="Uxk-wp-uYZ" id="mrG-uz-rl5"/>
+                <outlet property="stopButton" destination="JFk-G8-aYL" id="CpR-Rt-sUL"/>
                 <outlet property="timeElapsedField" destination="fxL-0N-gpt" id="RXP-J9-Qke"/>
                 <outlet property="topLabel" destination="wmf-k6-3Lr" id="4ZR-RK-xJv"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
@@ -79,11 +81,13 @@
                                     <action selector="newDocument:" target="-1" id="4Si-XN-c54"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
+                            <menuItem title="Open Spice RAW File…" id="IAo-SY-fd9">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="handleOpenFile:" target="Voe-Tx-rLC" id="mnd-xW-Khe"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Open…" enabled="NO" keyEquivalent="o" id="1RF-Oc-R5Q"/>
                             <menuItem title="Open Recent" id="tXI-mr-wws">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="oas-Oc-fiZ">
@@ -460,7 +464,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="1189" height="798"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="1189" height="798"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -500,6 +504,28 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JFk-G8-aYL">
+                                <rect key="frame" x="978" y="725" width="81" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="M6G-Zh-IuH">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="handleStopShoot:" target="Voe-Tx-rLC" id="dUf-Mm-3Lj"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zbT-Ln-eff">
+                                <rect key="frame" x="1059" y="725" width="81" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9Qy-Io-cy1">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="handleContinueShot:" target="Voe-Tx-rLC" id="3Dn-1B-bEy"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </customView>
                 </subviews>

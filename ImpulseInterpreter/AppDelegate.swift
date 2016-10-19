@@ -41,7 +41,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Menu handlers (these just call the AppController functions of the same name
     @IBAction func handleOpenFile(_ sender: AnyObject) {
         
-        appController.handleOpenFile()
+        if (!appController.handleOpenFile())
+        {
+            DLog("Could not open file")
+            return
+        }
         
         // appController.getDataFromFile()
         
@@ -103,7 +107,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.handleInitialDistribution(saveValues: false)
     }
 
-    @IBAction func handleShowMaxInterDiskV(_ sender: AnyObject) {
+    @IBAction func handleShowMaxInterDiskV(_ sender: AnyObject)
+    {
+        appController.handleMaxInterdiskV(withSave: false)
     }
     
     
@@ -114,7 +120,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func handleSaveMaxInterdiskV(_ sender: AnyObject)
     {
-        appController.handleMaxInterdiskV()
+        appController.handleMaxInterdiskV(withSave: true)
     }
     
     @IBAction func handleSaveInitialDistribution(_ sender: AnyObject)

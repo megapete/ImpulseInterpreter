@@ -178,10 +178,28 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         var outputFileString = String()
         
+        // we need to remove all the entries where time is less than simulationStartTime
+        var firstTimeIndex = 0
+        for i in 0..<Int(numData.numTimeSteps)
+        {
+            if (numData.time[i] >= simulationStartTime)
+            {
+                firstTimeIndex = i
+                break
+            }
+        }
+        
         for nextNode in nodes
         // for var i=0; i<self.numericalData?.diskID.count; i += 1
         {
-            let vArray = numData.nodalVoltages[nextNode]!
+            guard var vArray = numData.nodalVoltages[nextNode]
+                else
+            {
+                continue
+            }
+            
+            vArray.removeFirst(firstTimeIndex)
+            
             let maxV = vArray.max()
             let maxIndex = vArray.index(of: maxV!)
             
@@ -214,7 +232,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
     }
     
-    func handleMaxInterdiskV()
+    func handleMaxInterdiskV(withSave:Bool)
     {
         guard let numData = numericalData else {
             DLog("numericalData us undefined!")
@@ -236,12 +254,12 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
         }
         
-        for i in firstTimeIndex..<(nodes.count - 1)
+        for i in 0..<(nodes.count - 1)
         {
             var maxTStep = -1.0
             var maxVdiff = 0.0
             
-            for j in 0 ..< Int((numData.numTimeSteps))
+            for j in firstTimeIndex ..< Int((numData.numTimeSteps))
             {
                 let nextV1Array = numData.nodalVoltages[nodes[i]]
                 let nextV2Array = numData.nodalVoltages[nodes[i+1]]
@@ -260,27 +278,34 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             outputFileString += nextline
         }
         
-        let savePanel = NSSavePanel()
-        
-        savePanel.canCreateDirectories = true
-        savePanel.allowedFileTypes = ["txt"]
-        
-        if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+        if (withSave)
         {
-            guard let chosenFile:URL = savePanel.url
-                else
+            let savePanel = NSSavePanel()
+            
+            savePanel.canCreateDirectories = true
+            savePanel.allowedFileTypes = ["txt"]
+            
+            if (savePanel.runModal() == NSFileHandlingPanelOKButton)
             {
-                DLog("There is no URL?!?!?")
-                return
+                guard let chosenFile:URL = savePanel.url
+                    else
+                {
+                    DLog("There is no URL?!?!?")
+                    return
+                }
+                
+                do {
+                    try outputFileString.write(to: chosenFile, atomically: true, encoding: String.Encoding.utf8)
+                }
+                catch {
+                    ALog("Could not write file!")
+                }
+                
             }
-            
-            do {
-                try outputFileString.write(to: chosenFile, atomically: true, encoding: String.Encoding.utf8)
-            }
-            catch {
-                ALog("Could not write file!")
-            }
-            
+        }
+        else
+        {
+            // must be "show"
         }
     }
     
@@ -509,6 +534,11 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         {
             numericalData = PCH_NumericalData(dataString: currentFileString! as String)
         }
+        else
+        {
+            ALog("Bad file name!")
+            return
+        }
         
         // set up the contents of the Coils menu
         let coilNames = numericalData!.getCoilNames()
@@ -539,7 +569,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     }
     
     /// Function to open a file using the standard open dialog
-    func handleOpenFile()
+    func handleOpenFile() -> Bool
     {
         let getFilePanel = NSOpenPanel()
         
@@ -564,7 +594,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             else
             {
                 DLog("Could not open file for reading")
-                return
+                return false
             }
             
             currentFileHandle = chosenFileHandle
@@ -581,14 +611,16 @@ class PCH_AppController: NSObject, NSWindowDelegate {
                 currentFileURL = oldFileURL
                 currentFileString = oldFileString
                 
-                return
+                return false
             }
-            
             
             DLog("We have a usable file!")
             
-            // graphView.needsDisplay = true
+            return true
         }
+        
+        DLog("User selected cancel")
+        return false
     }
 
     /// Function that does a perfunctory test of the first few lines of data in currentFile to make sure it is of the correct form

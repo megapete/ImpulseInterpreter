@@ -31,31 +31,29 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     var deviceCurrents:[String:[Double]]
     
     /// The maximum voltage in the file (used to scale the output graph)
-    var maxVoltage:Double = 0.0
+    // var maxVoltage:Double = 0.0
     
     /// The minimum voltage in the file (used to scale the output graph)
-    var minVoltage:Double = 0.0
+    // var minVoltage:Double = 0.0
     
     /// The maximum current in the file (used for scaling)
-    var maxCurrent:Double = 0.0
+    // var maxCurrent:Double = 0.0
     
     /// The minimum current in the file (used for scaling)
-    var minCurrent:Double = 0.0
+    // var minCurrent:Double = 0.0
     
     /**
         The designated initializer for the class.
     
         - parameter dataString: The string that holds the entire impulse file
     */
-    init?(dataString:String)
+    init?(dataString:String, openFileProgressIndicator:NSProgressIndicator)
     {
         nodeID = Array()
         nodalVoltages = Dictionary()
         
         deviceID = Array()
         deviceCurrents = Dictionary()
-        
-        
         
         // The first thing we'll do is split the string into components where each line is a component
         let linesArray = dataString.components(separatedBy: CharacterSet.newlines)
@@ -98,6 +96,11 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         // We need an array to hold the variable names in the same order as the file
         var varNames:[String] = Array()
         var varKeys:[String] = Array()
+        
+        DispatchQueue.main.async {
+            openFileProgressIndicator.doubleValue = 2.5
+            openFileProgressIndicator.displayIfNeeded()
+        }
         
         DLog("Reading variable names...")
         while (!nextLine.contains("Values:"))
@@ -142,6 +145,11 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         }
         DLog("Done")
         
+        DispatchQueue.main.async {
+            openFileProgressIndicator.doubleValue = 5.0
+            openFileProgressIndicator.displayIfNeeded()
+        }
+        
         // we're going to want the voltage and current ID arrays sorted, so:
         nodeID.sort()
         deviceID.sort()
@@ -151,34 +159,41 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         lineCount += 1
         nextLine = linesArray[lineCount]
         
+        let varNameCount = varNames.count
+        
         // reset the max and min values for voltages and currents
-        maxCurrent = -DBL_MAX
-        maxVoltage = -DBL_MAX
-        minCurrent = DBL_MAX
-        minVoltage = DBL_MAX
+        // maxCurrent = -DBL_MAX
+        // maxVoltage = -DBL_MAX
+        // minCurrent = DBL_MAX
+        // minVoltage = DBL_MAX
         
         // We now get the data for each timestep
         DLog("Processing values at each timestep")
         for i in 0..<points
         {
-            if (i % 100 == 0)
+            if (i != 0) && (i % 100 == 0)
             {
                 DLog("Processing timestep: \(i)")
+                
+                DispatchQueue.main.async {
+                    openFileProgressIndicator.increment(by: 10.0)
+                    openFileProgressIndicator.displayIfNeeded()
+                }
             }
             
+            let timeStepIndex = lineCount + (varNameCount + 1) * Int(i)
+            let valueIndexBase = timeStepIndex + 1
+            
             // first line is the timestep index and the time
-            let timeStepLine = nextLine.components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
+            let timeStepLine = linesArray[timeStepIndex].components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
             time[Int(i)] = Double(timeStepLine[1])!
             
-            lineCount += 1
-            nextLine = linesArray[lineCount]
-            
-            for j in 0..<varNames.count
+            for j in 0..<varNameCount
             {
                 let varKey = varKeys[j]
                 let nextVar = varNames[j]
                 
-                guard let value = Double(nextLine.trimmingCharacters(in: CharacterSet.whitespaces))
+                guard let value = Double(linesArray[valueIndexBase + Int(j)].trimmingCharacters(in: CharacterSet.whitespaces))
                 else
                 {
                     DLog("Illegal value in file")
@@ -187,6 +202,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 
                 if (nextVar.characters.first == "V")
                 {
+                /*
                     if value > maxVoltage
                     {
                         maxVoltage = value
@@ -195,11 +211,12 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                     {
                         minVoltage = value
                     }
-                    
+                */
                     nodalVoltages[varKey]![Int(i)] = value
                 }
                 else if (nextVar.characters.first == "I")
                 {
+                /*
                     if value > maxCurrent
                     {
                         maxCurrent = value
@@ -208,12 +225,9 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                     {
                         minCurrent = value
                     }
-                    
+                */
                     deviceCurrents[varKey]![Int(i)] = value
                 }
-                
-                lineCount += 1
-                nextLine = linesArray[lineCount]
             }
         }
         

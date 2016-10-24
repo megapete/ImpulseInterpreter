@@ -49,6 +49,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var stopButton:NSButton?
     var continueButton:NSButton?
     
+    var openFileProgress:NSProgressIndicator?
+    
     var simulationIsRunning = false
     
     // ignore everything before this time (to try and get rid of spurious oscillations at the beginning of a simulation)
@@ -530,9 +532,16 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     /// Function to extract the numerical data from the file
     func getDataFromFile()
     {
+        // progress indicator calls MUST be done on the main queue, so this is the way to do it
+        DispatchQueue.main.async {
+            self.loadingProgress!.stopAnimation(self)
+            
+            self.openFileProgress!.isHidden = false
+        }
+        
         if (currentFileString != nil)
         {
-            numericalData = PCH_NumericalData(dataString: currentFileString! as String)
+            numericalData = PCH_NumericalData(dataString: currentFileString! as String, openFileProgressIndicator: openFileProgress!)
         }
         else
         {
@@ -617,6 +626,11 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             DLog("We have a usable file!")
             
             return true
+        }
+        
+        // progress indicator calls MUST be done on the main queue, so this is the way to do it
+        DispatchQueue.main.async {
+            self.loadingProgress!.stopAnimation(self)
         }
         
         DLog("User selected cancel")

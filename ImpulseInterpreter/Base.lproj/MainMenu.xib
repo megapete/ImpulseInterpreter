@@ -18,6 +18,7 @@
                 <outlet property="coilMenu" destination="GEO-Iw-cKr" id="Ek9-og-MRy"/>
                 <outlet property="continueButton" destination="zbT-Ln-eff" id="4f1-gI-9sN"/>
                 <outlet property="loadFileProgInd" destination="Uxk-wp-uYZ" id="mrG-uz-rl5"/>
+                <outlet property="openFileProgress" destination="lVV-AU-Xft" id="mZx-C9-ZCJ"/>
                 <outlet property="stopButton" destination="JFk-G8-aYL" id="CpR-Rt-sUL"/>
                 <outlet property="timeElapsedField" destination="fxL-0N-gpt" id="RXP-J9-Qke"/>
                 <outlet property="topLabel" destination="wmf-k6-3Lr" id="4ZR-RK-xJv"/>
@@ -464,7 +465,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="1189" height="798"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="1189" height="798"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -491,8 +492,8 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Uxk-wp-uYZ">
-                                <rect key="frame" x="586" y="391" width="16" height="16"/>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Uxk-wp-uYZ">
+                                <rect key="frame" x="578" y="383" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fxL-0N-gpt">
@@ -526,6 +527,10 @@
                                     <action selector="handleContinueShot:" target="Voe-Tx-rLC" id="3Dn-1B-bEy"/>
                                 </connections>
                             </button>
+                            <progressIndicator hidden="YES" wantsLayer="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="lVV-AU-Xft">
+                                <rect key="frame" x="468" y="636" width="253" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
                         </subviews>
                     </customView>
                 </subviews>

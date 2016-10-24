@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var coilMenu: NSMenu!
     @IBOutlet weak var timeElapsedField: NSTextField!
    
+    @IBOutlet weak var openFileProgress: NSProgressIndicator!
     @IBOutlet weak var bottomLabel: NSTextField!
     @IBOutlet weak var topLabel: NSTextField!
     
@@ -50,15 +51,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // appController.getDataFromFile()
         
         self.loadFileProgInd.startAnimation(self)
+        self.loadFileProgInd.displayIfNeeded()
         
-        // The godamned open dialog will cause a big white space to appear and stay there until the file is actually finished being read, UNLESS we do the read in a background thread.
+        // The goddamned open dialog will cause a big white space to appear and stay there until the file is actually finished being read, UNLESS we do the read in a background thread.
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
             
                 self.appController.getDataFromFile()
             
             // progress indicator calls MUST be done on the main queue, so this is the way to do it
             DispatchQueue.main.async {
-                self.loadFileProgInd.stopAnimation(self)
+                self.openFileProgress.isHidden = true
+                self.openFileProgress.doubleValue = 0.0
             }
         });
  
@@ -82,6 +85,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.continueButton = self.continueButton
         
         appController.loadingProgress = loadFileProgInd
+        
+        appController.openFileProgress = self.openFileProgress
     }
     
     func handleCoilChange(_ sender: AnyObject)

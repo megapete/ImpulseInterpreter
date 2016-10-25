@@ -143,6 +143,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             lineCount += 1
             nextLine = linesArray[lineCount]
         }
+        
         DLog("Done")
         
         DispatchQueue.main.async {
@@ -170,7 +171,10 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         // We now get the data for each timestep
         DLog("Processing values at each timestep")
         for i in 0..<points
+        // DispatchQueue.concurrentPerform(iterations: Int(points))
         {
+            // (i:Int) -> Void in
+            
             if (i != 0) && (i % 100 == 0)
             {
                 DLog("Processing timestep: \(i)")
@@ -186,6 +190,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             
             // first line is the timestep index and the time
             let timeStepLine = linesArray[timeStepIndex].components(separatedBy: CharacterSet.whitespaces).filter {$0 != ""}
+            
             time[Int(i)] = Double(timeStepLine[1])!
             
             for j in 0..<varNameCount
@@ -196,36 +201,16 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 guard let value = Double(linesArray[valueIndexBase + Int(j)].trimmingCharacters(in: CharacterSet.whitespaces))
                 else
                 {
-                    DLog("Illegal value in file")
-                    return nil
+                    ALog("Illegal value in file")
+                    return
                 }
                 
                 if (nextVar.characters.first == "V")
                 {
-                /*
-                    if value > maxVoltage
-                    {
-                        maxVoltage = value
-                    }
-                    if value < minVoltage
-                    {
-                        minVoltage = value
-                    }
-                */
                     nodalVoltages[varKey]![Int(i)] = value
                 }
                 else if (nextVar.characters.first == "I")
                 {
-                /*
-                    if value > maxCurrent
-                    {
-                        maxCurrent = value
-                    }
-                    if value < minCurrent
-                    {
-                        minCurrent = value
-                    }
-                */
                     deviceCurrents[varKey]![Int(i)] = value
                 }
             }

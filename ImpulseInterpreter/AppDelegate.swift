@@ -63,6 +63,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.openFileProgress.isHidden = true
                 self.openFileProgress.doubleValue = 0.0
             }
+            
+            NSApp.terminate(nil)
         });
  
         

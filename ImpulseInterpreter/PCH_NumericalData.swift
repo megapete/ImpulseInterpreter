@@ -43,7 +43,31 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     // var minCurrent:Double = 0.0
     
     /**
-        The designated initializer for the class.
+        The designated initializer for the class using IMPRES data files (created by ImpulseModeler)
+    */
+    
+    init(simulationResult:PCH_BlueBookModelOutput)
+    {
+        self.numTimeSteps = UInt(simulationResult.timeArray.count)
+        self.time = simulationResult.timeArray
+        self.nodeID = simulationResult.voltageNodes
+        self.deviceID = simulationResult.deviceIDs
+        
+        self.nodalVoltages = Dictionary()
+        for i in 0..<simulationResult.voltsArray.count
+        {
+            self.nodalVoltages[self.nodeID[i]] = simulationResult.voltsArray[i]
+        }
+        
+        self.deviceCurrents = Dictionary()
+        for i in 0..<simulationResult.ampsArray.count
+        {
+            self.deviceCurrents[self.deviceID[i]] = simulationResult.ampsArray[i]
+        }
+    }
+    
+    /**
+        The designated initializer for the class using SPICE RAW data files.
     
         - parameter dataString: The string that holds the entire impulse file
     */
@@ -214,6 +238,11 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                     deviceCurrents[varKey]![Int(i)] = value
                 }
             }
+        }
+        
+        DispatchQueue.main.async {
+            openFileProgressIndicator.isHidden = true
+            openFileProgressIndicator.doubleValue = 0.0
         }
         
         DLog("Done")

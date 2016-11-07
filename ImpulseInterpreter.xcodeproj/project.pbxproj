@@ -14,6 +14,9 @@
 		D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */; };
 		D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */; };
 		D3804C1F1C2AE39300E28979 /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */; };
+		D3D39A611DD11FD3006B793C /* PCH_BlueBookModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */; };
+		D3D39A631DD120A1006B793C /* PCH_Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A621DD120A1006B793C /* PCH_Matrix.swift */; };
+		D3D39A651DD12101006B793C /* GlobalDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A641DD12101006B793C /* GlobalDefs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_NumericalData.swift; sourceTree = "<group>"; };
 		D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_GraphView.swift; sourceTree = "<group>"; };
 		D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_Defs.swift; sourceTree = "<group>"; };
+		D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_BlueBookModelOutput.swift; path = ../../ImpulseModeler/ImpulseModeler/PCH_BlueBookModelOutput.swift; sourceTree = "<group>"; };
+		D3D39A621DD120A1006B793C /* PCH_Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Matrix.swift; path = ../../InductanceCalculator/InductanceCalculator/PCH_Matrix.swift; sourceTree = "<group>"; };
+		D3D39A641DD12101006B793C /* GlobalDefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalDefs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,8 +65,11 @@
 			isa = PBXGroup;
 			children = (
 				D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */,
+				D3D39A641DD12101006B793C /* GlobalDefs.swift */,
 				D37D5B191C28C57000F19BAF /* AppDelegate.swift */,
 				D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */,
+				D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */,
+				D3D39A621DD120A1006B793C /* PCH_Matrix.swift */,
 				D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */,
 				D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */,
 				D37D5B1B1C28C57000F19BAF /* Assets.xcassets */,
@@ -144,8 +153,11 @@
 				D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */,
 				D3804C1F1C2AE39300E28979 /* PCH_Defs.swift in Sources */,
 				D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */,
+				D3D39A631DD120A1006B793C /* PCH_Matrix.swift in Sources */,
 				D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */,
 				D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */,
+				D3D39A651DD12101006B793C /* GlobalDefs.swift in Sources */,
+				D3D39A611DD11FD3006B793C /* PCH_BlueBookModelOutput.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

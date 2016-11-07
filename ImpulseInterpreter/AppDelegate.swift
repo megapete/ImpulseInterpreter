@@ -56,20 +56,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // The goddamned open dialog will cause a big white space to appear and stay there until the file is actually finished being read, UNLESS we do the read in a background thread.
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async(execute: {
             
-                self.appController.getDataFromFile()
+            self.appController.getDataFromFile()
             
-            // progress indicator calls MUST be done on the main queue, so this is the way to do it
-            DispatchQueue.main.async {
-                self.openFileProgress.isHidden = true
-                self.openFileProgress.doubleValue = 0.0
-            }
-            
-            NSApp.terminate(nil)
+            // NSApp.terminate(nil)
         });
  
         
         DLog("We have reached here")
     }
+    
+    @IBAction func handleOpenImpresFile(_ sender: AnyObject)
+    {
+        if !appController.handleOpenImpres()
+        {
+            DLog("Either the user clicked cancel or something went wrong")
+        }
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

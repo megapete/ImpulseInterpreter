@@ -577,6 +577,56 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         grView.needsDisplay = true
     }
     
+    /// Function to open an IMPRES file
+    func handleOpenImpres() -> Bool
+    {
+        let getFilePanel = NSOpenPanel()
+        
+        // set up the panel's properties
+        getFilePanel.canChooseDirectories = false
+        getFilePanel.canChooseFiles = true
+        getFilePanel.allowsMultipleSelection = false
+        getFilePanel.allowedFileTypes = ["impres"]
+        
+        if (getFilePanel.runModal() == NSFileHandlingPanelOKButton)
+        {
+            let simResult = NSKeyedUnarchiver.unarchiveObject(withFile: getFilePanel.url!.path) as! PCH_BlueBookModelOutput
+            
+            numericalData = PCH_NumericalData(simulationResult: simResult)
+            
+            // set up the contents of the Coils menu
+            let coilNames = numericalData!.getCoilNames()
+            
+            var gotOne = false
+            for nextName in coilNames
+            {
+                let nextCoilItem = NSMenuItem(title: nextName.uppercased(), action: #selector(AppDelegate.handleCoilChange(_:)), keyEquivalent: "")
+                if (!gotOne)
+                {
+                    currentCoilChoice = nextCoilItem
+                    nextCoilItem.state = NSOnState
+                    gotOne = true
+                }
+                
+                coilMenuContents!.addItem(nextCoilItem)
+            }
+            
+            guard let grView = graphView
+                else
+            {
+                return true
+            }
+            
+            grView.ZoomAll()
+            
+            grView.needsDisplay = true
+            
+            return true
+        }
+        
+        return false
+    }
+    
     /// Function to open a file using the standard open dialog
     func handleOpenFile() -> Bool
     {

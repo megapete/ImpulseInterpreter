@@ -590,6 +590,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         if (getFilePanel.runModal() == NSFileHandlingPanelOKButton)
         {
+            NSKeyedUnarchiver.setClass(PCH_BlueBookModelOutput.self, forClassName: "ImpulseResult")
             let simResult = NSKeyedUnarchiver.unarchiveObject(withFile: getFilePanel.url!.path) as! PCH_BlueBookModelOutput
             
             numericalData = PCH_NumericalData(simulationResult: simResult)

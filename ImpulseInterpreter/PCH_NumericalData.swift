@@ -54,15 +54,27 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         self.deviceID = simulationResult.deviceIDs
         
         self.nodalVoltages = Dictionary()
-        for i in 0..<simulationResult.voltsArray.count
+        for i in 0..<self.nodeID.count
         {
-            self.nodalVoltages[self.nodeID[i]] = simulationResult.voltsArray[i]
+            var vArray:[Double] = Array(repeating: 0.0, count: simulationResult.timeArray.count)
+            for j in 0..<simulationResult.timeArray.count
+            {
+                vArray.append(simulationResult.voltsArray[j][i])
+            }
+            
+            self.nodalVoltages[self.nodeID[i]] = vArray
         }
         
         self.deviceCurrents = Dictionary()
-        for i in 0..<simulationResult.ampsArray.count
+        for i in 0..<self.deviceID.count
         {
-            self.deviceCurrents[self.deviceID[i]] = simulationResult.ampsArray[i]
+            var iArray:[Double] = Array(repeating: 0.0, count: simulationResult.timeArray.count)
+            for j in 0..<simulationResult.timeArray.count
+            {
+                iArray.append(simulationResult.ampsArray[j][i])
+            }
+            
+            self.deviceCurrents[self.deviceID[i]] = iArray
         }
     }
     

@@ -140,6 +140,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     func getCoilNodeVoltagesAt(timeStepIndex:Int) -> [Double]
     {
         let targetNodes = self.currentCoilID() + "i"
+        let targetNodes2 = self.currentCoilID() + "I"
         
         guard let numData = numericalData
             else
@@ -147,7 +148,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return Array()
         }
         
-        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}.sorted()
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes) || $0.contains(targetNodes2)}.sorted()
         
         var result:[Double] = Array()
         
@@ -176,7 +177,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         let targetNodes = self.currentCoilID() + "i"
-        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        let targetNodes2 = self.currentCoilID() + "I"
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes) || $0.contains(targetNodes2)}
         
         var outputFileString = String()
         
@@ -242,7 +244,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         let targetNodes = self.currentCoilID() + "i"
-        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        let targetNodes2 = self.currentCoilID() + "I"
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes) || $0.contains(targetNodes2)}
         
         var outputFileString = String()
         
@@ -320,7 +323,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         }
         
         let targetNodes = self.currentCoilID() + "i"
-        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        let targetNodes2 = self.currentCoilID() + "I"
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes) || $0.contains(targetNodes2)}
     
         
         var initTime = 0
@@ -451,6 +455,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     func getCoilNodeIDs() -> [String]
     {
         let targetNodes = self.currentCoilID() + "i"
+        let targetNodes2 = self.currentCoilID() + "I"
         
         guard let numData = numericalData
         else
@@ -458,7 +463,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return Array()
         }
         
-        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes) || $0.contains(targetNodes2)}
         
         return nodes
     }
@@ -470,6 +475,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         var minResult:Double = DBL_MAX
         
         let targetNodes = self.currentCoilID() + "i"
+        let targetNodes2 = self.currentCoilID() + "I"
         
         guard let numData = numericalData
         else
@@ -488,7 +494,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
         }
         
-        let nodes = numData.nodeID.filter{$0.contains(targetNodes)}
+        let nodes = numData.nodeID.filter{$0.contains(targetNodes) || $0.contains(targetNodes2)}
         
         for nextNode in nodes
         {
@@ -526,7 +532,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return ""
         }
         
-        return currCoil.title.lowercased()
+        return currCoil.title // .lowercased()
     }
     
     /// Function to extract the numerical data from the file

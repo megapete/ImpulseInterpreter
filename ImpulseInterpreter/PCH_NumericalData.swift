@@ -59,7 +59,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             var vArray:[Double] = Array(repeating: 0.0, count: simulationResult.timeArray.count)
             for j in 0..<simulationResult.timeArray.count
             {
-                vArray.append(simulationResult.voltsArray[j][i])
+                vArray[j] = (simulationResult.voltsArray[j][i])
             }
             
             self.nodalVoltages[self.nodeID[i]] = vArray
@@ -71,7 +71,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             var iArray:[Double] = Array(repeating: 0.0, count: simulationResult.timeArray.count)
             for j in 0..<simulationResult.timeArray.count
             {
-                iArray.append(simulationResult.ampsArray[j][i])
+                iArray[j] = (simulationResult.ampsArray[j][i])
             }
             
             self.deviceCurrents[self.deviceID[i]] = iArray
@@ -280,7 +280,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     {
         var result = [String]()
         
-        let inputIDs = nodeID.filter{$0.contains("i")}
+        let inputIDs = nodeID.filter{$0.contains("i") || $0.contains("I")}
             
         for nextID in inputIDs
         {

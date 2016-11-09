@@ -61,6 +61,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     var loadingProgress:NSProgressIndicator?
     
+    var modelIsRAW = false
+    
     func stopShot()
     {
         if (simulationIsRunning)
@@ -532,6 +534,12 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             return ""
         }
         
+        // RAW files always are lowercased, so we need to write this
+        if (self.modelIsRAW)
+        {
+            return currCoil.title.lowercased()
+        }
+        
         return currCoil.title // .lowercased()
     }
     
@@ -554,6 +562,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             ALog("Bad file name!")
             return
         }
+        
+        self.modelIsRAW = true
         
         // set up the contents of the Coils menu
         let coilNames = numericalData!.getCoilNames()

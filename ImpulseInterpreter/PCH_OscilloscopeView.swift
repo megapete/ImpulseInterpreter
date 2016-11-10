@@ -16,7 +16,7 @@ class PCH_OscilloscopeView: NSWindowController
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     }
     
-    func DisplayForCoil(_ coilID:String)
+    func DisplayForCoil(_ coilID:String, withNumData:PCH_NumericalData)
     {
         guard let window = self.window
         else
@@ -31,6 +31,8 @@ class PCH_OscilloscopeView: NSWindowController
         }
         
         mainView.coilID = coilID
+        mainView.numericalData = withNumData
+        mainView.ZoomAll()
         
         mainView.needsDisplay = true
     }
@@ -39,7 +41,7 @@ class PCH_OscilloscopeView: NSWindowController
 
 class OscilloscopeView:NSView
 {
-    let inset = CGFloat(50.0)
+    let inset = CGFloat(20.0)
     
     /// The current scaling factors of the view
     var currentScale:(x:Double, y:Double) = (1.0, 1.0)
@@ -177,7 +179,7 @@ class OscilloscopeView:NSView
             
             if colorHue >= 1.0
             {
-                colorHue -= 1.0
+                colorHue = 0.0
             }
         }
     }

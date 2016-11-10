@@ -51,6 +51,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     var openFileProgress:NSProgressIndicator?
     
+    let oscilloWindow = PCH_OscilloscopeView(windowNibName: "PCH_OscilloscopeView")
+    
     var simulationIsRunning = false
     
     // ignore everything before this time (to try and get rid of spurious oscillations at the beginning of a simulation)
@@ -409,6 +411,13 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
     }
     
+    func handleShowWaveforms()
+    {
+        oscilloWindow.DisplayForCoil(self.currentCoilID(), withNumData: self.numericalData!)
+        
+        oscilloWindow.showWindow(self)
+    }
+    
     /// Show the impulse shot
     func handleShoot()
     {
@@ -597,6 +606,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     func handleOpenImpres() -> Bool
     {
         let getFilePanel = NSOpenPanel()
+        
+        self.modelIsRAW = false
         
         // set up the panel's properties
         getFilePanel.canChooseDirectories = false

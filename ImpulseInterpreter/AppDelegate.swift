@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     
     @IBOutlet weak var coilMenu: NSMenu!
+    
     @IBOutlet weak var timeElapsedField: NSTextField!
    
     @IBOutlet weak var openFileProgress: NSProgressIndicator!
@@ -66,6 +67,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         DLog("We have reached here")
     }
+    
+    @IBAction func handleShowWaveforms(_ sender: AnyObject)
+    {
+        appController.handleShowWaveforms()
+    }
+    
     
     @IBAction func handleOpenImpresFile(_ sender: AnyObject)
     {

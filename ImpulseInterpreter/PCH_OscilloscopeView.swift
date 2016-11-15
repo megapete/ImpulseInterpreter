@@ -8,13 +8,26 @@
 
 import Cocoa
 
-class PCH_OscilloscopeView: NSWindowController
+class PCH_OscilloscopeView: NSWindowController, NSWindowDelegate
 {
     override func windowDidLoad() {
         super.windowDidLoad()
 
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     }
+    
+    func windowDidResize(_ notification: Notification)
+    {
+        guard let mainView = self.window!.contentView as? OscilloscopeView
+            else
+        {
+            return
+        }
+        
+        mainView.ZoomAll()
+        mainView.needsDisplay = true
+    }
+    
     
     func DisplayForCoil(_ coilID:String, withNumData:PCH_NumericalData)
     {
@@ -41,7 +54,7 @@ class PCH_OscilloscopeView: NSWindowController
 
 class OscilloscopeView:NSView
 {
-    let inset = CGFloat(20.0)
+    let inset = CGFloat(50.0)
     
     /// The current scaling factors of the view
     var currentScale:(x:Double, y:Double) = (1.0, 1.0)
@@ -50,10 +63,14 @@ class OscilloscopeView:NSView
     var numericalData:PCH_NumericalData? = nil
     
     var numYlabels = 1
+    /// An array to hold the subviews that show the yLabels (needed for erasing when changes occur)
+    var yLabelArray:[NSTextField]? = nil
     
     var extremes = (maxV:-DBL_MAX, minV:DBL_MAX)
     
     var scaleChanged = true
+    
+    var yLabelKvPerTick = 10000.0
     
     /// Function to calculate the scale factors for the graph
     func ZoomAll()
@@ -78,8 +95,8 @@ class OscilloscopeView:NSView
             return
         }
         
-        currentScale.x = Double((xNodes - 1.0) / (self.frame.size.width - 2.5 * inset))
-        
+        currentScale.x = Double((xNodes - 1.0) / (self.frame.size.width - 1.25 * inset))
+        extremes = (maxV:-DBL_MAX, minV:DBL_MAX)
         
         for nextNode in targetNodeIDs
         {
@@ -102,15 +119,29 @@ class OscilloscopeView:NSView
             }
         }
         
-        // round up the max extreme to the next 25kV (same for min, but round down)
-        let yMax = round(extremes.maxV / 25000.0 + 0.5) * 25000.0
-        let yMin = round(extremes.minV / 25000.0 - 0.5) * 25000.0
+        // round up the max extreme to the next 10kV (same for min, but round down)
+        yLabelKvPerTick = 10000.0
         
-        // Set the number of labels so we get one every 20kV
-        self.numYlabels = Int((yMax - yMin) / 25000) + 1
+        var yMax = round(extremes.maxV / yLabelKvPerTick + 0.5) * yLabelKvPerTick
+        var yMin = round(extremes.minV / yLabelKvPerTick - 0.5) * yLabelKvPerTick
+        
+        // Set the number of labels so we get one every 10kV
+        self.numYlabels = Int((yMax - yMin) / yLabelKvPerTick) + 1
+        
+        // check if the labels will be too close together and if so, adjust the yLabelKvPerTick property so that there are fewer labels
+        while Double(self.frame.size.height - 0.5 * inset) / Double(self.numYlabels - 1) < 25.0
+        {
+            yLabelKvPerTick += 10000.0
+            
+            yMax = round(extremes.maxV / yLabelKvPerTick + 0.5) * yLabelKvPerTick
+            yMin = round(extremes.minV / yLabelKvPerTick - 0.5) * yLabelKvPerTick
+            
+            self.numYlabels = Int((yMax - yMin) / yLabelKvPerTick) + 1
+        }
+        
         let yOverall = /* 1.05 * */ CGFloat(yMax - yMin)
         
-        currentScale.y = Double(yOverall / (self.frame.size.height - 3.0 * inset))
+        currentScale.y = Double(yOverall / (self.frame.size.height - 0.5 * inset))
         
         scaleChanged = true
     }
@@ -139,20 +170,65 @@ class OscilloscopeView:NSView
         
         NSColor.black.set()
         let path = NSBezierPath()
-        path.move(to: NSMakePoint(inset * 1.5, inset / 2.0))
-        path.line(to: NSMakePoint(inset * 1.5, self.frame.size.height - inset))
+        path.move(to: NSMakePoint(inset * 1, inset / 4.0))
+        path.line(to: NSMakePoint(inset * 1, self.frame.size.height - inset / 4.0))
         path.stroke()
         
-        let yMin = round(extremes.minV / 25000.0 - 0.5) * 25000.0
+        let yMin = round(extremes.minV / yLabelKvPerTick - 0.5) * yLabelKvPerTick
         let xAxisHeight = -CGFloat(yMin)
         
         path.removeAllPoints()
-        path.move(to: NSMakePoint(inset * 1.3 /* / 2.0 */, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y)))
-        path.line(to: NSMakePoint(self.frame.size.width - inset, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y)))
+        path.move(to: NSMakePoint(inset * 0.8 /* / 2.0 */, inset * 0.25 + xAxisHeight / CGFloat(currentScale.y)))
+        path.line(to: NSMakePoint(self.frame.size.width - inset * 0.25, inset * 0.25 + xAxisHeight / CGFloat(currentScale.y)))
         path.stroke()
         
-        let origin:NSPoint = NSMakePoint(inset * 1.5, inset * 1.5 + xAxisHeight / CGFloat(currentScale.y))
+        let origin:NSPoint = NSMakePoint(inset * 1, inset * 0.25 + xAxisHeight / CGFloat(currentScale.y))
 
+        if scaleChanged
+        {
+            if (yLabelArray != nil)
+            {
+                for nextView in yLabelArray!
+                {
+                    nextView.removeFromSuperview()
+                }
+            }
+            
+            var yPos = self.frame.size.height - inset * 0.25 - 5.0
+            let yOffset = (self.frame.size.height - 0.5 * inset) / CGFloat(numYlabels - 1)
+            let kvMax = round(extremes.maxV / yLabelKvPerTick + 0.5) * yLabelKvPerTick
+            // let kvMin = round(extremes.minV / 50000.0 - 0.5) * 50000.0
+            let kvPerTick = yLabelKvPerTick
+            var kvCurrent = kvMax
+            
+            yLabelArray = Array()
+            
+            for _ in 0..<numYlabels
+            {
+                if #available(OSX 10.12, *)
+                {
+                    let theKV = "\(Int(kvCurrent / 1000.0))kV"
+                    let nextField = NSTextField(labelWithString: theKV)
+                    nextField.isEditable = false
+                    nextField.isBezeled = false
+                    nextField.isBordered = false
+                    nextField.alignment = NSRightTextAlignment
+                    
+                    nextField.frame = NSMakeRect(5.0, yPos, origin.x - 10.0, 15.0)
+                    
+                    yLabelArray!.append(nextField)
+                    self.addSubview(nextField)
+                    
+                    yPos -= yOffset
+                    kvCurrent -= kvPerTick
+                    
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+            
+            scaleChanged = false
+        }
         
         var colorHue:CGFloat = 0.0
         

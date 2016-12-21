@@ -617,7 +617,10 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         if (getFilePanel.runModal() == NSFileHandlingPanelOKButton)
         {
+            // This is required to be able to open the files created in different programs with the same class.
             NSKeyedUnarchiver.setClass(PCH_BlueBookModelOutput.self, forClassName: "ImpulseResult")
+            NSKeyedUnarchiver.setClass(PCH_BB_ModelSection.self, forClassName: "BBSections")
+            
             let simResult = NSKeyedUnarchiver.unarchiveObject(withFile: getFilePanel.url!.path) as! PCH_BlueBookModelOutput
             
             numericalData = PCH_NumericalData(simulationResult: simResult)

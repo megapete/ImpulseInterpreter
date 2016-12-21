@@ -50,8 +50,36 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     {
         self.numTimeSteps = UInt(simulationResult.timeArray.count)
         self.time = simulationResult.timeArray
-        self.nodeID = simulationResult.voltageNodes
-        self.deviceID = simulationResult.deviceIDs
+        
+        self.nodeID = Array()
+        self.deviceID = Array()
+        
+        for nextSection in simulationResult.sections
+        {
+            let coilID = PCH_StrLeft(nextSection.name, length: 2)
+            
+            let nextInNode = String(format: "%@I%03d", coilID, nextSection.inNode)
+            let nextOutNode = String(format: "%@I%03d", coilID, nextSection.outNode)
+            
+            // let nextInNode = "\(coilID)I\(nextSection.inNode)"
+            // let nextOutNode = "\(coilID)I\(nextSection.outNode)"
+            
+            if !nodeID.contains(nextInNode)
+            {
+                nodeID.append(nextInNode)
+            }
+            
+            if !nodeID.contains(nextOutNode)
+            {
+                nodeID.append(nextOutNode)
+            }
+            
+            deviceID.append(nextSection.name)
+            
+        }
+        
+        // self.nodeID = simulationResult.voltageNodes
+        // self.deviceID = simulationResult.deviceIDs
         
         self.nodalVoltages = Dictionary()
         for i in 0..<self.nodeID.count

@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// The AppController object for the instance
     let appController = PCH_AppController()
     
-    let test = PCH_BlueBookModelOutput(timeArray: [0], voltageNodes: ["S"], voltsArray: [[0]], deviceIDs: ["D"], ampsArray: [[0]])
+    // let test = PCH_BlueBookModelOutput(timeArray: [0], voltageNodes: ["S"], voltsArray: [[0]], deviceIDs: ["D"], ampsArray: [[0]])
 
     @IBOutlet weak var window: NSWindow!
     

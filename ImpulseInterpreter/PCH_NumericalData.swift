@@ -227,10 +227,10 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         let varNameCount = varNames.count
         
         // reset the max and min values for voltages and currents
-        // maxCurrent = -DBL_MAX
-        // maxVoltage = -DBL_MAX
-        // minCurrent = DBL_MAX
-        // minVoltage = DBL_MAX
+        // maxCurrent = -Double.greatestFiniteMagnitude
+        // maxVoltage = -Double.greatestFiniteMagnitude
+        // minCurrent = Double.greatestFiniteMagnitude
+        // minVoltage = Double.greatestFiniteMagnitude
         
         // We now get the data for each timestep
         DLog("Processing values at each timestep")

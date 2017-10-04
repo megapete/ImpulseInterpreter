@@ -66,7 +66,7 @@ class OscilloscopeView:NSView
     /// An array to hold the subviews that show the yLabels (needed for erasing when changes occur)
     var yLabelArray:[NSTextField]? = nil
     
-    var extremes = (maxV:-DBL_MAX, minV:DBL_MAX)
+    var extremes = (maxV:-Double.greatestFiniteMagnitude, minV:Double.greatestFiniteMagnitude)
     
     var scaleChanged = true
     
@@ -96,7 +96,7 @@ class OscilloscopeView:NSView
         }
         
         currentScale.x = Double((xNodes - 1.0) / (self.frame.size.width - 1.25 * inset))
-        extremes = (maxV:-DBL_MAX, minV:DBL_MAX)
+        extremes = (maxV:-Double.greatestFiniteMagnitude, minV:Double.greatestFiniteMagnitude)
         
         for nextNode in targetNodeIDs
         {

@@ -51,7 +51,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     var openFileProgress:NSProgressIndicator?
     
-    let oscilloWindow = PCH_OscilloscopeView(windowNibName: "PCH_OscilloscopeView")
+    let oscilloWindow = PCH_OscilloscopeView(windowNibName: NSNib.Name(rawValue: "PCH_OscilloscopeView"))
     
     var simulationIsRunning = false
     
@@ -90,7 +90,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
     }
     
-    func advanceShotTimeStep()
+    @objc func advanceShotTimeStep()
     {
         guard let numData = numericalData
         else
@@ -220,7 +220,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         savePanel.canCreateDirectories = true
         savePanel.allowedFileTypes = ["txt"]
         
-        if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+        if (savePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
         {
             guard let chosenFile:URL = savePanel.url
             else
@@ -294,7 +294,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             savePanel.canCreateDirectories = true
             savePanel.allowedFileTypes = ["txt"]
             
-            if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+            if (savePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
             {
                 guard let chosenFile:URL = savePanel.url
                     else
@@ -391,7 +391,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         savePanel.canCreateDirectories = true
         savePanel.allowedFileTypes = ["txt"]
         
-        if (savePanel.runModal() == NSFileHandlingPanelOKButton)
+        if (savePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
         {
             guard let chosenFile:URL = savePanel.url
                 else
@@ -482,8 +482,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     /// Function to get the max and min voltages for the currently-selected coil
     func getCoilExtremeVoltages() -> (maxV:Double, minV:Double)
     {
-        var maxResult:Double = -DBL_MAX
-        var minResult:Double = DBL_MAX
+        var maxResult:Double = -Double.greatestFiniteMagnitude
+        var minResult:Double = Double.greatestFiniteMagnitude
         
         let targetNodes = self.currentCoilID() + "i"
         let targetNodes2 = self.currentCoilID() + "I"
@@ -615,7 +615,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         getFilePanel.allowsMultipleSelection = false
         getFilePanel.allowedFileTypes = ["impres"]
         
-        if (getFilePanel.runModal() == NSFileHandlingPanelOKButton)
+        if (getFilePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
         {
             // This is required to be able to open the files created in different programs with the same class.
             NSKeyedUnarchiver.setClass(PCH_BlueBookModelOutput.self, forClassName: "ImpulseResult")
@@ -669,7 +669,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         getFilePanel.allowsMultipleSelection = false
         getFilePanel.allowedFileTypes = ["txt", "raw"]
         
-        if (getFilePanel.runModal() == NSFileHandlingPanelOKButton)
+        if (getFilePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
         {
             // we save the old file in case the new file isn't a valid impulse file
             let oldFileHandle = currentFileHandle

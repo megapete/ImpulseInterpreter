@@ -133,13 +133,13 @@ class PCH_GraphView: NSView {
             var yPos = self.frame.size.height - inset * 1.5 - 5.0
             let yOffset = (self.frame.size.height - 3.0 * inset) / CGFloat(numYlabels - 1)
             let kvMax = round(extremes.maxV / 50000.0 + 0.5) * 50000.0
-            let kvMin = round(extremes.minV / 50000.0 - 0.5) * 50000.0
+            // let kvMin = round(extremes.minV / 50000.0 - 0.5) * 50000.0
             let kvPerTick = 50000.0
             var kvCurrent = kvMax
             
             yLabelArray = Array()
             
-            for i in 0..<numYlabels
+            for _ in 0..<numYlabels
             {
                 if #available(OSX 10.12, *)
                 {

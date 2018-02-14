@@ -269,11 +269,11 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                     return
                 }
                 
-                if (nextVar.characters.first == "V")
+                if (nextVar.first == "V")
                 {
                     nodalVoltages[varKey]![Int(i)] = value
                 }
-                else if (nextVar.characters.first == "I")
+                else if (nextVar.first == "I")
                 {
                     deviceCurrents[varKey]![Int(i)] = value
                 }

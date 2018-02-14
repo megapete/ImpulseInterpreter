@@ -212,7 +212,7 @@ class OscilloscopeView:NSView
                     nextField.isEditable = false
                     nextField.isBezeled = false
                     nextField.isBordered = false
-                    nextField.alignment = NSRightTextAlignment
+                    nextField.alignment = .right
                     
                     nextField.frame = NSMakeRect(5.0, yPos, origin.x - 10.0, 15.0)
                     

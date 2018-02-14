@@ -103,13 +103,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.openFileProgress = self.openFileProgress
     }
     
-    func handleCoilChange(_ sender: AnyObject)
+    @objc func handleCoilChange(_ sender: AnyObject)
     {
         DLog("Change coil in AppDelegate")
         
-        appController.currentCoilChoice?.state = NSOffState
+        appController.currentCoilChoice?.state = .off
         appController.currentCoilChoice = sender as? NSMenuItem
-        appController.currentCoilChoice?.state = NSOnState
+        appController.currentCoilChoice?.state = .on
         
         appController.graphView?.voltages = nil
         appController.graphView?.ZoomAll()

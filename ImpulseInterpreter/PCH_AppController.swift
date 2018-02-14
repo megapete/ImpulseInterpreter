@@ -584,7 +584,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             if (!gotOne)
             {
                 currentCoilChoice = nextCoilItem
-                nextCoilItem.state = NSOnState
+                nextCoilItem.state = .on
+
                 gotOne = true
             }
 
@@ -635,7 +636,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
                 if (!gotOne)
                 {
                     currentCoilChoice = nextCoilItem
-                    nextCoilItem.state = NSOnState
+                    nextCoilItem.state = .on
                     gotOne = true
                 }
                 

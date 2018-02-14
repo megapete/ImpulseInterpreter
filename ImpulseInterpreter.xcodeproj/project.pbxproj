@@ -7,21 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D32175A42034B2C4002D9CC7 /* GlobalDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175A22034B2C4002D9CC7 /* GlobalDefs.swift */; };
+		D32175A72034B32A002D9CC7 /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175A62034B32A002D9CC7 /* PCH_Defs.swift */; };
+		D32175AA2034E04A002D9CC7 /* PCH_ImpulseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175A82034E04A002D9CC7 /* PCH_ImpulseViewController.swift */; };
+		D32175AB2034E04A002D9CC7 /* PCH_ImpulseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D32175A92034E04A002D9CC7 /* PCH_ImpulseViewController.xib */; };
+		D32175AD2034E096002D9CC7 /* PCH_ImpulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175AC2034E096002D9CC7 /* PCH_ImpulseView.swift */; };
 		D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B191C28C57000F19BAF /* AppDelegate.swift */; };
 		D37D5B1C1C28C57000F19BAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D37D5B1B1C28C57000F19BAF /* Assets.xcassets */; };
 		D37D5B1F1C28C57000F19BAF /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D37D5B1D1C28C57000F19BAF /* MainMenu.xib */; };
 		D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */; };
 		D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */; };
 		D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */; };
-		D3804C1F1C2AE39300E28979 /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */; };
 		D3C7687D1DD4AD5300563391 /* PCH_OscilloscopeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3C7687C1DD4AD5300563391 /* PCH_OscilloscopeView.xib */; };
 		D3D39A611DD11FD3006B793C /* PCH_BlueBookModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */; };
 		D3D39A631DD120A1006B793C /* PCH_Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A621DD120A1006B793C /* PCH_Matrix.swift */; };
-		D3D39A651DD12101006B793C /* GlobalDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A641DD12101006B793C /* GlobalDefs.swift */; };
 		D3F3010E1DD37E930039B04A /* PCH_OscilloscopeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F3010C1DD37E930039B04A /* PCH_OscilloscopeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D32175A22034B2C4002D9CC7 /* GlobalDefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalDefs.swift; path = ../../../../Dropbox/MyProjects/GlobalDefs.swift; sourceTree = "<group>"; };
+		D32175A62034B32A002D9CC7 /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Defs.swift; path = ../../ImpulseModeler/ImpulseModeler/PCH_Defs.swift; sourceTree = "<group>"; };
+		D32175A82034E04A002D9CC7 /* PCH_ImpulseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCH_ImpulseViewController.swift; sourceTree = "<group>"; };
+		D32175A92034E04A002D9CC7 /* PCH_ImpulseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PCH_ImpulseViewController.xib; sourceTree = "<group>"; };
+		D32175AC2034E096002D9CC7 /* PCH_ImpulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCH_ImpulseView.swift; sourceTree = "<group>"; };
 		D37D5B161C28C57000F19BAF /* ImpulseInterpreter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImpulseInterpreter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37D5B191C28C57000F19BAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D37D5B1B1C28C57000F19BAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -30,11 +38,9 @@
 		D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_AppController.swift; sourceTree = "<group>"; };
 		D37D5B2A1C29CD3600F19BAF /* PCH_NumericalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_NumericalData.swift; sourceTree = "<group>"; };
 		D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_GraphView.swift; sourceTree = "<group>"; };
-		D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_Defs.swift; sourceTree = "<group>"; };
 		D3C7687C1DD4AD5300563391 /* PCH_OscilloscopeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PCH_OscilloscopeView.xib; sourceTree = "<group>"; };
 		D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_BlueBookModelOutput.swift; path = ../../ImpulseModeler/ImpulseModeler/PCH_BlueBookModelOutput.swift; sourceTree = "<group>"; };
 		D3D39A621DD120A1006B793C /* PCH_Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Matrix.swift; path = ../../InductanceCalculator/InductanceCalculator/PCH_Matrix.swift; sourceTree = "<group>"; };
-		D3D39A641DD12101006B793C /* GlobalDefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalDefs.swift; sourceTree = "<group>"; };
 		D3F3010C1DD37E930039B04A /* PCH_OscilloscopeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_OscilloscopeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,8 +74,8 @@
 		D37D5B181C28C57000F19BAF /* ImpulseInterpreter */ = {
 			isa = PBXGroup;
 			children = (
-				D3804C1E1C2AE39300E28979 /* PCH_Defs.swift */,
-				D3D39A641DD12101006B793C /* GlobalDefs.swift */,
+				D32175A22034B2C4002D9CC7 /* GlobalDefs.swift */,
+				D32175A62034B32A002D9CC7 /* PCH_Defs.swift */,
 				D37D5B191C28C57000F19BAF /* AppDelegate.swift */,
 				D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */,
 				D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */,
@@ -78,6 +84,9 @@
 				D3F3010C1DD37E930039B04A /* PCH_OscilloscopeView.swift */,
 				D3C7687C1DD4AD5300563391 /* PCH_OscilloscopeView.xib */,
 				D37D5B2E1C2A2D8A00F19BAF /* PCH_GraphView.swift */,
+				D32175A82034E04A002D9CC7 /* PCH_ImpulseViewController.swift */,
+				D32175A92034E04A002D9CC7 /* PCH_ImpulseViewController.xib */,
+				D32175AC2034E096002D9CC7 /* PCH_ImpulseView.swift */,
 				D37D5B1B1C28C57000F19BAF /* Assets.xcassets */,
 				D37D5B1D1C28C57000F19BAF /* MainMenu.xib */,
 				D37D5B201C28C57000F19BAF /* Info.plist */,
@@ -146,6 +155,7 @@
 			files = (
 				D37D5B1C1C28C57000F19BAF /* Assets.xcassets in Resources */,
 				D37D5B1F1C28C57000F19BAF /* MainMenu.xib in Resources */,
+				D32175AB2034E04A002D9CC7 /* PCH_ImpulseViewController.xib in Resources */,
 				D3C7687D1DD4AD5300563391 /* PCH_OscilloscopeView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,15 +167,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D32175AA2034E04A002D9CC7 /* PCH_ImpulseViewController.swift in Sources */,
 				D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */,
-				D3804C1F1C2AE39300E28979 /* PCH_Defs.swift in Sources */,
 				D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */,
 				D3F3010E1DD37E930039B04A /* PCH_OscilloscopeView.swift in Sources */,
 				D3D39A631DD120A1006B793C /* PCH_Matrix.swift in Sources */,
 				D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */,
 				D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */,
-				D3D39A651DD12101006B793C /* GlobalDefs.swift in Sources */,
+				D32175A72034B32A002D9CC7 /* PCH_Defs.swift in Sources */,
+				D32175A42034B2C4002D9CC7 /* GlobalDefs.swift in Sources */,
 				D3D39A611DD11FD3006B793C /* PCH_BlueBookModelOutput.swift in Sources */,
+				D32175AD2034E096002D9CC7 /* PCH_ImpulseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,7 +302,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.huberis-tech.ImpulseInterpreter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -304,7 +316,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.huberis-tech.ImpulseInterpreter";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

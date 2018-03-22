@@ -41,7 +41,10 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var elapsedTimeIndicator:NSTextField?
     
     var shotTimer = Timer()
+    let timerRepeatTime = 0.005
     var shotTimeStep = 0
+    var nextUpdateTime = 0.0
+    let simTimePerStep = 0.1E-6
     
     var coilMenuContents:NSMenu?
     var currentCoilChoice:NSMenuItem?
@@ -56,10 +59,10 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     var simulationIsRunning = false
     
     // ignore everything before this time (to try and get rid of spurious oscillations at the beginning of a simulation)
-    let simulationStartTime = 100.0E-9
+    let simulationStartTime = -1.0
     
     // The time that will be used for "initial distribution" values
-    let initDistributionTime = 1.2E-6
+    let initDistributionTime = 1.1E-6
     
     var loadingProgress:NSProgressIndicator?
     
@@ -87,7 +90,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         stopButton!.title = "Stop"
         continueButton!.isHidden = true
         
-        shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
+        shotTimer = Timer.scheduledTimer(timeInterval: timerRepeatTime, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
     }
     
     @objc func advanceShotTimeStep()
@@ -113,6 +116,14 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             shotTimeStep += 1
             return
         }
+        
+        // advance to the next value we want to display
+        while numData.time[shotTimeStep] < nextUpdateTime
+        {
+            shotTimeStep += 1
+        }
+        
+        nextUpdateTime += simTimePerStep
         
         var elTime = numData.time[shotTimeStep]
         var timeUnits = "µs"
@@ -442,7 +453,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         // gView.needsDisplay = true
         
         shotTimeStep = 0
-        shotTimer = Timer.scheduledTimer(timeInterval: 0.01, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
+        nextUpdateTime = 0.0
+        shotTimer = Timer.scheduledTimer(timeInterval: timerRepeatTime, target:self, selector: #selector(PCH_AppController.advanceShotTimeStep), userInfo: nil, repeats: true)
         
     }
     

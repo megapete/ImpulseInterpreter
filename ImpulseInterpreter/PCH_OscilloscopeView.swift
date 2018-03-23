@@ -95,7 +95,9 @@ class OscilloscopeView:NSView
             return
         }
         
-        currentScale.x = Double((xNodes - 1.0) / (self.frame.size.width - 1.25 * inset))
+        var minTime = numData.time[0]
+        var maxTime = numData.time.last!
+        currentScale.x = (maxTime - minTime) / Double(self.frame.size.width - 1.25 * inset)
         extremes = (maxV:-Double.greatestFiniteMagnitude, minV:Double.greatestFiniteMagnitude)
         
         for nextNode in targetNodeIDs
@@ -246,7 +248,7 @@ class OscilloscopeView:NSView
                 let voltagesToGround = numData.nodalVoltages[nextDisk]
                 let voltageToGround = voltagesToGround![i]
                 
-                path.line(to: NSPoint(x: Double(origin.x) + Double(i) / currentScale.x, y: Double(origin.y) + voltageToGround / currentScale.y))
+                path.line(to: NSPoint(x: Double(origin.x) + numData.time[i] / currentScale.x, y: Double(origin.y) + voltageToGround / currentScale.y))
             }
             
             path.stroke()

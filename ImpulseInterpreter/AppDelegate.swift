@@ -73,6 +73,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         appController.handleShowWaveforms()
     }
     
+    @IBAction func handleSaveData(_ sender: Any)
+    {
+        appController.handleSaveData()
+    }
     
     @IBAction func handleOpenImpresFile(_ sender: AnyObject)
     {

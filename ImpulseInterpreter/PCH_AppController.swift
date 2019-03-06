@@ -458,6 +458,68 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
     }
     
+    func handleSaveData()
+    {
+        guard let numData = self.numericalData else
+        {
+            DLog("No data!")
+            return
+        }
+        
+        let savePanel = NSSavePanel()
+        
+        savePanel.canCreateDirectories = true
+        savePanel.allowedFileTypes = ["txt"]
+        
+        if (savePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
+        {
+            guard let newFileName = savePanel.url else
+            {
+                DLog("There is no URL?!?!?")
+                return
+            }
+            
+            // for now we'll just show 1000 points
+            let numPointsToSave = 1000
+            
+            let stepInterval = Int(numData.numTimeSteps) / numPointsToSave
+            
+            let nodeIDs = numData.nodeID
+            
+            var fileString = "Time,"
+            for nextID in nodeIDs
+            {
+                fileString += nextID + ","
+            }
+            
+            fileString += "\n"
+            
+            var i:Int = 0
+            while i < numData.numTimeSteps
+            {
+                fileString += "\(numData.time[i]),"
+                
+                for nextID in nodeIDs
+                {
+                    fileString += "\(numData.nodalVoltages[nextID]![i]),"
+                }
+                
+                fileString += "\n"
+                
+                i += stepInterval
+            }
+            
+            do {
+                try fileString.write(to: newFileName, atomically: true, encoding: String.Encoding.utf8)
+            }
+            catch
+            {
+                ALog("Could not write file!")
+            }
+        }
+    }
+    
+    
     /// Override for the awakeFromNib function. We use it to stuff a reference to this controller into the graph view
     override func awakeFromNib()
     {
@@ -614,6 +676,8 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         
         grView.needsDisplay = true
     }
+    
+    
     
     /// Function to open an IMPRES file
     func handleOpenImpres() -> Bool

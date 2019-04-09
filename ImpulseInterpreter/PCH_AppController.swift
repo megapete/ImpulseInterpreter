@@ -54,7 +54,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
     
     var openFileProgress:NSProgressIndicator?
     
-    let oscilloWindow = PCH_OscilloscopeView(windowNibName: NSNib.Name(rawValue: "PCH_OscilloscopeView"))
+    let oscilloWindow = PCH_OscilloscopeView(windowNibName: "PCH_OscilloscopeView")
     
     var simulationIsRunning = false
     
@@ -220,7 +220,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             vArray.removeFirst(firstTimeIndex)
             
             let maxV = vArray.max()
-            let maxIndex = vArray.index(of: maxV!)
+            let maxIndex = vArray.firstIndex(of: maxV!)
             
             let nextline = String(format: "%@,%0.7E,%0.7E\n", nextNode, numData.time[maxIndex!], maxV!)
             outputFileString += nextline

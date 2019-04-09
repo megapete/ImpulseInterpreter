@@ -14,6 +14,16 @@ class PCH_OscilloscopeView: NSWindowController, NSWindowDelegate
         super.windowDidLoad()
 
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+        
+        guard let mainView = self.window!.contentView as? OscilloscopeView
+            else
+        {
+            DLog("View is not defined yet!")
+            return
+        }
+        
+        mainView.wantsLayer = true
+        mainView.layer?.backgroundColor = .black
     }
     
     func windowDidResize(_ notification: Notification)
@@ -23,6 +33,8 @@ class PCH_OscilloscopeView: NSWindowController, NSWindowDelegate
         {
             return
         }
+        
+        
         
         mainView.ZoomAll()
         mainView.needsDisplay = true
@@ -170,7 +182,7 @@ class OscilloscopeView:NSView
             return
         }
         
-        NSColor.black.set()
+        NSColor.white.set()
         let path = NSBezierPath()
         path.move(to: NSMakePoint(inset * 1, inset / 4.0))
         path.line(to: NSMakePoint(inset * 1, self.frame.size.height - inset / 4.0))
@@ -215,8 +227,9 @@ class OscilloscopeView:NSView
                     nextField.isBezeled = false
                     nextField.isBordered = false
                     nextField.alignment = .right
+                    nextField.textColor = NSColor.white
                     
-                    nextField.frame = NSMakeRect(5.0, yPos, origin.x - 10.0, 15.0)
+                    nextField.frame = NSMakeRect(5.0, yPos, origin.x - 9.0, 15.0)
                     
                     yLabelArray!.append(nextField)
                     self.addSubview(nextField)

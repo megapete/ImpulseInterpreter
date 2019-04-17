@@ -88,6 +88,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             for j in 0..<simulationResult.timeArray.count
             {
                 vArray[j] = (simulationResult.voltsArray[j][i])
+                ZAssert(!vArray[j].isNaN, message: "Found a voltage NaN")
             }
             
             self.nodalVoltages[self.nodeID[i]] = vArray
@@ -100,6 +101,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             for j in 0..<simulationResult.timeArray.count
             {
                 iArray[j] = (simulationResult.ampsArray[j][i])
+                ZAssert(!iArray[j].isNaN, message: "Found a current NaN")
             }
             
             self.deviceCurrents[self.deviceID[i]] = iArray

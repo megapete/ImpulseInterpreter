@@ -86,6 +86,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    @IBAction func handleMaxIntersectionVoltages(_ sender: Any)
+    {
+        appController.handleSaveMaxIntersectionVolts()
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

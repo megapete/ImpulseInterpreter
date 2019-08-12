@@ -181,6 +181,59 @@ class PCH_AppController: NSObject, NSWindowDelegate {
         return result
     }
     
+    func handleSaveMaxIntersectionVolts()
+    {
+        guard let numData = numericalData else {
+            DLog("numericalData us undefined!")
+            return
+        }
+        
+        var outputFileString = String()
+        
+        let numNodes = numData.nodalVoltages.count
+        
+        // To access the voltage difference between node X (row) and node Y (col) (with Y > X, and both zero-based), the index is X + Y(Y-1)/2
+        
+        for X in 0..<numNodes-1
+        {
+            for Y in (X+1)..<numNodes
+            {
+                outputFileString.append("\(numData.maxIntersectionVolts[X + Y * (Y-1) / 2])")
+                
+                if Y < (numNodes - 1)
+                {
+                    outputFileString.append(",")
+                }
+            }
+            
+            outputFileString.append("\n")
+        }
+        
+        let savePanel = NSSavePanel()
+        
+        savePanel.canCreateDirectories = true
+        savePanel.allowedFileTypes = ["txt"]
+        
+        if (savePanel.runModal().rawValue == NSFileHandlingPanelOKButton)
+        {
+            guard let chosenFile:URL = savePanel.url
+                else
+            {
+                DLog("There is no URL?!?!?")
+                return
+            }
+            
+            do {
+                try outputFileString.write(to: chosenFile, atomically: true, encoding: String.Encoding.utf8)
+            }
+            catch {
+                ALog("Could not write file!")
+            }
+        }
+        
+    }
+    
+    
     /** Save the maximum voltages for each "disk" in the data file (as a CSV file). The format of each line of the file is:
         DISKID, TIME_STEP_MAX, MAX_VOLTAGE
     */

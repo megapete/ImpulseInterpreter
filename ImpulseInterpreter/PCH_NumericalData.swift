@@ -30,6 +30,9 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     /// A dictionary of arrays where the key is the deviceID and the arrays are the currents through them at each timestep
     var deviceCurrents:[String:[Double]]
     
+    /// A matrix holding the maximum voltages that appear between any two sections in the simulation. See PCH_BlueBookModelOutput for the way to access these values
+    let maxIntersectionVolts:[Double]
+    
     /// The maximum voltage in the file (used to scale the output graph)
     // var maxVoltage:Double = 0.0
     
@@ -106,6 +109,8 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             
             self.deviceCurrents[self.deviceID[i]] = iArray
         }
+        
+        self.maxIntersectionVolts = simulationResult.maxVoltDiffArray
     }
     
     /**
@@ -115,6 +120,9 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
     */
     init?(dataString:String, openFileProgressIndicator:NSProgressIndicator)
     {
+        // This field isn't used for SPICE files
+        self.maxIntersectionVolts = []
+        
         nodeID = Array()
         nodalVoltages = Dictionary()
         

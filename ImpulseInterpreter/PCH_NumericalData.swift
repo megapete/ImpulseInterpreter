@@ -59,7 +59,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
         
         for nextSection in simulationResult.sections
         {
-            let coilID = PCH_StrLeft(nextSection.name, length: 2)
+            let coilID = String(nextSection.name.prefix(2))
             
             let nextInNode = String(format: "%@I%03d", coilID, nextSection.inNode)
             let nextOutNode = String(format: "%@I%03d", coilID, nextSection.outNode)
@@ -187,12 +187,14 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 varNames.append(voltageLine[1])
                 
                 // We extract the variable key for use in the nodalVoltage dicitonary and initialize the array for that key
-                let varKey = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
+                let midRange = (voltageLine[1].startIndex)...(voltageLine[1].index(voltageLine[1].endIndex, offsetBy: -1))
+                // let varKey = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
+                let varKey = String(voltageLine[1][midRange])
                 varKeys.append(varKey)
                 nodalVoltages[varKey] = Array(repeating:0.0, count:Int(numTimeSteps))
                 
                 // save the node's actual name
-                let nodeName = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
+                let nodeName = varKey
                 nodeID.append(nodeName)
                 
             }
@@ -204,12 +206,14 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
                 varNames.append(currentLine[1])
                 
                 // We extract the variable key for use in the deviceCurrents dicitonary and initialize the array for that key
-                let varKey = PCH_StrMid(currentLine[1], start: 2, end: PCH_StrLength(currentLine[1])-2)
+                let midRange = (currentLine[1].startIndex)...(currentLine[1].index(currentLine[1].endIndex, offsetBy: -1))
+                // let varKey = PCH_StrMid(voltageLine[1], start: 2, end: PCH_StrLength(voltageLine[1])-2)
+                let varKey = String(currentLine[1][midRange])
                 varKeys.append(varKey)
                 deviceCurrents[varKey] = Array(repeating:0.0, count:Int(numTimeSteps))
                 
                 // save the node's actual name
-                let deviceName = PCH_StrMid(currentLine[1], start: 2, end: PCH_StrLength(currentLine[1])-2)
+                let deviceName = varKey
                 deviceID.append(deviceName)
             }
             // else ignore the line
@@ -322,11 +326,11 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             
         for nextID in inputIDs
         {
-            let testString = PCH_StrLeft(nextID, length: 2)
+            let testString = nextID.prefix(2)
             
-            if !result.contains(testString)
+            if !result.contains(String(testString))
             {
-                result.append(testString)
+                result.append(String(testString))
             }
             
         }

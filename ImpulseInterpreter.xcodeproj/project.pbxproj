@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D32175A42034B2C4002D9CC7 /* GlobalDefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175A22034B2C4002D9CC7 /* GlobalDefs.swift */; };
-		D32175A72034B32A002D9CC7 /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175A62034B32A002D9CC7 /* PCH_Defs.swift */; };
 		D32175AA2034E04A002D9CC7 /* PCH_ImpulseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175A82034E04A002D9CC7 /* PCH_ImpulseViewController.swift */; };
 		D32175AB2034E04A002D9CC7 /* PCH_ImpulseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D32175A92034E04A002D9CC7 /* PCH_ImpulseViewController.xib */; };
 		D32175AD2034E096002D9CC7 /* PCH_ImpulseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32175AC2034E096002D9CC7 /* PCH_ImpulseView.swift */; };
@@ -22,11 +21,11 @@
 		D3D39A611DD11FD3006B793C /* PCH_BlueBookModelOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */; };
 		D3D39A631DD120A1006B793C /* PCH_Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D39A621DD120A1006B793C /* PCH_Matrix.swift */; };
 		D3F3010E1DD37E930039B04A /* PCH_OscilloscopeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F3010C1DD37E930039B04A /* PCH_OscilloscopeView.swift */; };
+		F542CB6E237F32C6000EB3C1 /* PCH_Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F542CB6D237F32C6000EB3C1 /* PCH_Defs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D32175A22034B2C4002D9CC7 /* GlobalDefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlobalDefs.swift; path = ../../../../Dropbox/MyProjects/GlobalDefs.swift; sourceTree = "<group>"; };
-		D32175A62034B32A002D9CC7 /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Defs.swift; path = ../../ImpulseModeler/ImpulseModeler/PCH_Defs.swift; sourceTree = "<group>"; };
 		D32175A82034E04A002D9CC7 /* PCH_ImpulseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCH_ImpulseViewController.swift; sourceTree = "<group>"; };
 		D32175A92034E04A002D9CC7 /* PCH_ImpulseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PCH_ImpulseViewController.xib; sourceTree = "<group>"; };
 		D32175AC2034E096002D9CC7 /* PCH_ImpulseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCH_ImpulseView.swift; sourceTree = "<group>"; };
@@ -42,6 +41,7 @@
 		D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_BlueBookModelOutput.swift; path = ../../ImpulseModeler/ImpulseModeler/PCH_BlueBookModelOutput.swift; sourceTree = "<group>"; };
 		D3D39A621DD120A1006B793C /* PCH_Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Matrix.swift; path = ../../InductanceCalculator/InductanceCalculator/PCH_Matrix.swift; sourceTree = "<group>"; };
 		D3F3010C1DD37E930039B04A /* PCH_OscilloscopeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCH_OscilloscopeView.swift; sourceTree = "<group>"; };
+		F542CB6D237F32C6000EB3C1 /* PCH_Defs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PCH_Defs.swift; path = ../../../../Dropbox/MyProjects/PCH_Defs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				D32175A22034B2C4002D9CC7 /* GlobalDefs.swift */,
-				D32175A62034B32A002D9CC7 /* PCH_Defs.swift */,
+				F542CB6D237F32C6000EB3C1 /* PCH_Defs.swift */,
 				D37D5B191C28C57000F19BAF /* AppDelegate.swift */,
 				D37D5B261C28C6DE00F19BAF /* PCH_AppController.swift */,
 				D3D39A601DD11FD3006B793C /* PCH_BlueBookModelOutput.swift */,
@@ -121,7 +121,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Huberis Technologies";
 				TargetAttributes = {
 					D37D5B151C28C57000F19BAF = {
@@ -170,11 +170,11 @@
 				D32175AA2034E04A002D9CC7 /* PCH_ImpulseViewController.swift in Sources */,
 				D37D5B2F1C2A2D8A00F19BAF /* PCH_GraphView.swift in Sources */,
 				D37D5B1A1C28C57000F19BAF /* AppDelegate.swift in Sources */,
+				F542CB6E237F32C6000EB3C1 /* PCH_Defs.swift in Sources */,
 				D3F3010E1DD37E930039B04A /* PCH_OscilloscopeView.swift in Sources */,
 				D3D39A631DD120A1006B793C /* PCH_Matrix.swift in Sources */,
 				D37D5B2B1C29CD3600F19BAF /* PCH_NumericalData.swift in Sources */,
 				D37D5B271C28C6DE00F19BAF /* PCH_AppController.swift in Sources */,
-				D32175A72034B32A002D9CC7 /* PCH_Defs.swift in Sources */,
 				D32175A42034B2C4002D9CC7 /* GlobalDefs.swift in Sources */,
 				D3D39A611DD11FD3006B793C /* PCH_BlueBookModelOutput.swift in Sources */,
 				D32175AD2034E096002D9CC7 /* PCH_ImpulseView.swift in Sources */,
@@ -301,6 +301,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = ImpulseInterpreter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -314,6 +315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = ImpulseInterpreter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

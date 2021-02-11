@@ -327,7 +327,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             }
         }
         
-        for i in 0..<(nodes.count - 1)
+        for i in 0..<(nodes.count - 2)
         {
             var maxTStep = -1.0
             var maxVdiff = 0.0
@@ -335,7 +335,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             for j in firstTimeIndex ..< Int((numData.numTimeSteps))
             {
                 let nextV1Array = numData.nodalVoltages[nodes[i]]
-                let nextV2Array = numData.nodalVoltages[nodes[i+1]]
+                let nextV2Array = numData.nodalVoltages[nodes[i+2]]
                 
                 let nextV1 = nextV1Array![j]
                 let nextV2 = nextV2Array![j]
@@ -347,7 +347,7 @@ class PCH_AppController: NSObject, NSWindowDelegate {
                 }
             }
             
-            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", nodes[i], nodes[i+1], maxTStep, maxVdiff)
+            let nextline = String(format: "%@-%@,%0.7E,%0.7E\n", nodes[i], nodes[i+2], maxTStep, maxVdiff)
             outputFileString += nextline
         }
         
@@ -752,6 +752,18 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             NSKeyedUnarchiver.setClass(PCH_BB_ModelSection.self, forClassName: "BBSections")
             
             let simResult = NSKeyedUnarchiver.unarchiveObject(withFile: getFilePanel.url!.path) as! PCH_BlueBookModelOutput
+            
+            let voltMatrix = simResult.voltsArray
+            for nextOuter in voltMatrix
+            {
+                for nextInner in nextOuter
+                {
+                    if fabs(nextInner) > 1.0E100
+                    {
+                        DLog("Illegal value!")
+                    }
+                }
+            }
             
             numericalData = PCH_NumericalData(simulationResult: simResult)
             

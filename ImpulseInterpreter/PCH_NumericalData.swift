@@ -91,7 +91,7 @@ class PCH_NumericalData /* NSObject , NSCoding */ {
             for j in 0..<simulationResult.timeArray.count
             {
                 vArray[j] = (simulationResult.voltsArray[j][i])
-                ZAssert(!vArray[j].isNaN, message: "Found a voltage NaN")
+                ZAssert(!vArray[j].isNaN && vArray[j] < 1.0E100, message: "Found an illegal voltage at time count: \(j)")
             }
             
             self.nodalVoltages[self.nodeID[i]] = vArray

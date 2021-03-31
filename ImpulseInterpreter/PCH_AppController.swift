@@ -272,8 +272,17 @@ class PCH_AppController: NSObject, NSWindowDelegate {
             
             vArray.removeFirst(firstTimeIndex)
             
-            let maxV = vArray.max()
-            let maxIndex = vArray.firstIndex(of: maxV!)
+            var maxV = vArray.max()
+            var maxIndex = vArray.firstIndex(of: maxV!)
+            
+            let minV = vArray.min()
+            let minIndex = vArray.firstIndex(of: minV!)
+            
+            if fabs(minV!) > maxV
+            {
+                maxV = minV
+                maxIndex = minIndex
+            }
             
             let nextline = String(format: "%@,%0.7E,%0.7E\n", nextNode, numData.time[maxIndex!], maxV!)
             outputFileString += nextline
